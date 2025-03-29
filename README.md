@@ -1,8 +1,11 @@
-CEUB
-Cinecia da Computação
-Professor:
+###CEUB
+
+##Ciencia da Computação
+
+Professor: Felippe Pires Ferreira
 
 Aluno:Enzo Gazolla Nagano
-Matricula:
+
+Matricula: 22401710
 
 Projeto Java
