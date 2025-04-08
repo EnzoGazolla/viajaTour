@@ -1,7 +1,13 @@
 package com.enzoapps.viajatour.db;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.h2.tools.Server;
+
+import com.enzoapps.viajatour.util.DBConexao;
 
 public class Cliente {
 	private Long id;
@@ -11,10 +17,10 @@ public class Cliente {
 	private TipoCliente tipo;
 	private String cpf;
 	private String passaporte;
-	
-	public Cliente(Long id, String nome, String telefone, String email, TipoCliente tipo, String cpf,
+
+	public Cliente(String nome, String telefone, String email, TipoCliente tipo, String cpf,
 			String passaporte) {
-		this.id = id;
+
 		this.nome = nome;
 		this.telefone = telefone;
 		this.email = email;
@@ -88,20 +94,99 @@ public class Cliente {
 		return "Cliente [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", email=" + email + ", tipo=" + tipo
 				+ ", cpf=" + cpf + ", passaporte=" + passaporte + "]";
 	}
-	
+
 	public boolean save() {
-		return true;
+
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("INSERT INTO clientes (nome, telefone, email, tipo_cliente, cpf, passaporte) values"
+					+ "('" + nome + "', '" + telefone + "',' " + email + "',' " + tipo
+					+ "',' " + cpf + "',' " + passaporte + "');");
+			DBConexao.fecharConexao(con);
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
+
 	public boolean delete() {
-		return true;
+		
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("DELETE FROM clientes WHERE ID=" + id + ";");
+			DBConexao.fecharConexao(con);
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
+
 	public static Cliente findById(Long id) {
-		return new Cliente();
+	    Cliente c = null;
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        var rs = s.executeQuery("SELECT * FROM clientes WHERE ID = " + id + ";");
+
+	        if (rs.next()) {
+	            c = map(rs);
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return c;
 	}
+
+	private static Cliente map(ResultSet rs) throws SQLException {
+		Cliente c;
+		c = new Cliente();
+		c.id = rs.getLong("ID");
+		c.nome = rs.getString("NOME");
+		c.telefone = rs.getString("TELEFONE");
+		c.email = rs.getString("EMAIL");
+		c.tipo = "NACIONAL".equals(rs.getString("TIPO_CLIENTE")) ? TipoCliente.NACIONAL : TipoCliente.ESTRANGEIRO;
+		c.cpf = rs.getString("CPF");
+		c.passaporte = rs.getString("PASSAPORTE");
+		return c;
+	}
+
+
 	public static List<Cliente> findAll() {
-		return new ArrayList<Cliente>();
+		List<Cliente> list = new ArrayList<Cliente>();
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        var rs = s.executeQuery("SELECT * FROM clientes;");
+            
+	        while (rs.next()) {
+	        	list.add(map(rs));
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
 	}
-	 private static Cliente mapResultSetToCliente( ) {
-		 return new Cliente();
-	 }
+
+
 }

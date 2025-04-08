@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConexao {
 	
-	public Connection criarConexao() {
+	public static Connection criarConexao() {
 		
 		Connection con = null;
 		
@@ -20,7 +20,7 @@ public class DBConexao {
 		return con;
 	}
 	
-	public void fecharConexao(Connection con) {
+	public static void fecharConexao(Connection con) {
 		
 		try {
 			if (con != null || !con.isClosed()) {
