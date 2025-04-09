@@ -30,7 +30,7 @@ public class Cliente {
 	}
 
 	public Cliente() {
-		// TODO Auto-generated constructor stub
+	
 	}
 
 	public Long getId() {
@@ -95,7 +95,7 @@ public class Cliente {
 				+ ", cpf=" + cpf + ", passaporte=" + passaporte + "]";
 	}
 
-	public boolean save() {
+	public boolean insert() {
 
 		try {
 
@@ -105,6 +105,30 @@ public class Cliente {
 			s.execute("INSERT INTO clientes (nome, telefone, email, tipo_cliente, cpf, passaporte) values"
 					+ "('" + nome + "', '" + telefone + "',' " + email + "',' " + tipo
 					+ "',' " + cpf + "',' " + passaporte + "');");
+			DBConexao.fecharConexao(con);
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	public boolean update() {
+
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("UPDATE clientes SET nome = '" + nome + 
+			          "', telefone = '" + telefone + 
+			          "', email = '" + email + 
+			          "', tipo_cliente = '" + tipo + 
+			          "', passaporte = '" + passaporte + 
+			          "', cpf = '" + cpf + "' WHERE id = " + id + ";");
 			DBConexao.fecharConexao(con);
 			
 			return true;
@@ -187,6 +211,5 @@ public class Cliente {
 
 	    return list;
 	}
-
 
 }

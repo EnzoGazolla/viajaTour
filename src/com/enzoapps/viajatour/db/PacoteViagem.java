@@ -1,8 +1,12 @@
 package com.enzoapps.viajatour.db;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.enzoapps.viajatour.util.DBConexao;
 
 public class PacoteViagem {
 	
@@ -13,8 +17,7 @@ public class PacoteViagem {
 	private int duracaoDias;
 	private BigDecimal precoBase;
 	
-	public PacoteViagem(Long id, String nome, String descricao, String destino, int duracaoDias, BigDecimal precoBase) {
-		this.id = id;
+	public PacoteViagem(String nome, String descricao, String destino, int duracaoDias, BigDecimal precoBase) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.destino = destino;
@@ -22,13 +25,8 @@ public class PacoteViagem {
 		this.precoBase = precoBase;
 	}
 	
-
 	public PacoteViagem() {
-	
-		// TODO Auto-generated constructor stub
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -84,22 +82,125 @@ public class PacoteViagem {
 				+ ", duracaoDias=" + duracaoDias + ", precoBase=" + precoBase + "]";
 	}
 	
-	public boolean save() {
-		return true;
-	}
-	public boolean delete() {
-		return true;
-	}
-	public static PacoteViagem  findById(Long id) {
-		return new PacoteViagem ();
-	}
-	public static List<PacoteViagem > findAll() {
-		return new ArrayList<PacoteViagem >();
-	}
-	 private static PacoteViagem  mapResultSetToCliente( ) {
-		 return new PacoteViagem ();
-	 }
-	
-	
+	public boolean insert() {
 
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("INSERT INTO pacotes_viagem (nome, descricao, destino, duracao_dias, preco_base) VALUES ("
+			        + "'" + nome + "', "
+			        + "'" + descricao + "', "
+			        + "'" + destino + "', "
+			        + duracaoDias + ", "
+			        + precoBase + ");");
+			DBConexao.fecharConexao(con);
+
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	public boolean update() {
+
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("UPDATE pacotes_viagem SET "
+			        + "nome = '" + nome + "', "
+			        + "descricao = '" + descricao + "', "
+			        + "destino = '" + destino + "', "
+			        + "duracao_dias = " + duracaoDias + ", "
+			        + "preco_base = " + precoBase + " "
+			        + "WHERE id = " + id + ";");
+			DBConexao.fecharConexao(con);
+
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	public boolean delete() {
+		
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("DELETE FROM pacotes_viagem WHERE ID=" + id + ";");
+			DBConexao.fecharConexao(con);
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static PacoteViagem findById(Long id) {
+		PacoteViagem pc = null;
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        var rs = s.executeQuery("SELECT * FROM pacotes_viagem WHERE ID = " + id + ";");
+
+	        if (rs.next()) {
+	            pc = map(rs);
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return pc;
+	}
+
+	private static PacoteViagem map(ResultSet rs) throws SQLException {
+		PacoteViagem pc;
+		pc = new PacoteViagem();
+		pc.id = rs.getLong("ID");
+		pc.nome = rs.getString("NOME");
+		pc.descricao = rs.getString("DESCRICAO");
+		pc.destino = rs.getString("DESTINO");
+		pc.duracaoDias = rs.getInt("duracao_dias");
+		pc.precoBase = rs.getBigDecimal("preco_base");
+		return pc;
+	}
+
+
+	public static List<PacoteViagem> findAll() {
+		List<PacoteViagem> list = new ArrayList<PacoteViagem>();
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        var rs = s.executeQuery("SELECT * FROM pacotes_viagem;");
+            
+	        while (rs.next()) {
+	        	list.add(map(rs));
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
+	}
 }
