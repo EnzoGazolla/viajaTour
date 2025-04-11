@@ -19,6 +19,12 @@ public class DBBanco {
 					+ "cpf VARCHAR(14) UNIQUE NULL,"
 					+ "passaporte VARCHAR(50) UNIQUE NULL" + ");");
 
+			s.execute("CREATE TABLE IF NOT EXISTS tipos_pacote ("
+	                + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
+	                + "nome VARCHAR(100) NOT NULL,"
+	                + "descricao TEXT"
+	                + ");");
+			
 			s.execute("CREATE TABLE IF NOT EXISTS pacotes_viagem ("
 	                + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
 	                + "nome VARCHAR(255) NOT NULL,"
@@ -26,7 +32,8 @@ public class DBBanco {
 	                + "destino VARCHAR(255) NOT NULL,"
 	                + "duracao_dias INT NOT NULL,"
 	                + "preco_base DECIMAL(10, 2) NOT NULL,"
-	                + "tipo_pacote VARCHAR(50)"
+	                + "id_tipos_pacote BIGINT NOT NULL,"
+	                + "FOREIGN KEY (id_tipos_pacote) REFERENCES tipos_pacote(id)"
 	                + ");");
 			
 			s.execute("CREATE TABLE IF NOT EXISTS servicos_adicionais ("
@@ -47,13 +54,12 @@ public class DBBanco {
 	                + ");");
 			
 			s.execute("CREATE TABLE IF NOT EXISTS contratacao_servicos ("
+					+ "id BIGINT PRIMARY KEY AUTO_INCREMENT, "
 	                + "contratacao_id BIGINT NOT NULL,"
 	                + "servico_id BIGINT NOT NULL,"
-	                + "PRIMARY KEY (contratacao_id, servico_id)," 
 	                + "FOREIGN KEY (contratacao_id) REFERENCES contratacoes(id) ON DELETE CASCADE," 
 	                + "FOREIGN KEY (servico_id) REFERENCES servicos_adicionais(id));");
-	 
-		
+	 	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

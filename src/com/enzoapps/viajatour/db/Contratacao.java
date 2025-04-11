@@ -1,9 +1,13 @@
 package com.enzoapps.viajatour.db;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.enzoapps.viajatour.util.DBConexao;
 
 public class Contratacao {
 	
@@ -13,8 +17,7 @@ public class Contratacao {
 	private LocalDate dataContratacao;
 	private BigDecimal valorTotal;
 	
-	public Contratacao(Long id, Long clienteId, Long pacoteViagemId, LocalDate dataContratacao, BigDecimal valorTotal) {
-		this.id = id;
+	public Contratacao(Long clienteId, Long pacoteViagemId, LocalDate dataContratacao, BigDecimal valorTotal) {
 		this.clienteId = clienteId;
 		this.pacoteViagemId = pacoteViagemId;
 		this.dataContratacao = dataContratacao;
@@ -71,22 +74,119 @@ public class Contratacao {
 				+ ", dataContratacao=" + dataContratacao + ", valorTotal=" + valorTotal + "]";
 	}
 	
-	public boolean save() {
-		return true;
+	public boolean insert() {
+
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("INSERT INTO contratacoes (id_cliente, id_pacote_viagem, data_contratacao, valor_total) VALUES (" +
+			          "'" + clienteId + "', " +
+			          "'" + pacoteViagemId + "', " +
+			          "'" + dataContratacao + "', " +  
+			          valorTotal + ");");
+			DBConexao.fecharConexao(con);
+
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	public boolean delete() {
-		return true;
-	}
-	public static Contratacao findById(Long id) {
-		return new Contratacao();
-	}
-	public static List<Contratacao> findAll() {
-		return new ArrayList<Contratacao>();
-	}
-	 private static Contratacao mapResultSetToCliente( ) {
-		 return new Contratacao();
-	 }
-	 
-	 
 	
+	public boolean update() {
+
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("UPDATE contratacoes SET "
+			        + "id_cliente = '" + clienteId + "', "
+			        + "id_pacote_viagem = '" + pacoteViagemId + "', "
+			        + "data_contratacao = '" + dataContratacao + "', "
+			        + "valor_total = " + valorTotal + " "
+			        + "WHERE id = " + id + ";");
+			DBConexao.fecharConexao(con);
+
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
+	public boolean delete() {
+		
+		try {
+
+			var con = DBConexao.criarConexao();
+			var s = con.createStatement();
+
+			s.execute("DELETE FROM contratacoes WHERE ID=" + id + ";");
+			DBConexao.fecharConexao(con);
+			
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static Contratacao findById(Long id) {
+		Contratacao c = null;
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        var rs = s.executeQuery("SELECT * FROM contratacoes WHERE ID = " + id + ";");
+
+	        if (rs.next()) {
+	            c = map(rs);
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return c;
+	}
+
+	private static Contratacao map(ResultSet rs) throws SQLException {
+		Contratacao c;
+		c = new Contratacao();
+		c.id = rs.getLong("ID");
+		c.clienteId = rs.getLong("id_cliente");
+		c.pacoteViagemId = rs.getLong("id_pacote_viagem");
+		c.dataContratacao = rs.getDate("data_contratacao").toLocalDate();
+		c.valorTotal = rs.getBigDecimal("valor_total");
+		return c;
+	}
+
+	public static List<Contratacao> findAll() {
+		List<Contratacao> list = new ArrayList<Contratacao>();
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        var rs = s.executeQuery("SELECT * FROM contratacoes;");
+            
+	        while (rs.next()) {
+	        	list.add(map(rs));
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
+	}
 }

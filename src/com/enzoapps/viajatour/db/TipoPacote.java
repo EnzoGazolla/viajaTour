@@ -1,6 +1,5 @@
 package com.enzoapps.viajatour.db;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,20 +7,18 @@ import java.util.List;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
-public class ServicoAdicional {
+public class TipoPacote {
 	
 	private Long id;
 	private String nome;
 	private String descricao;
-	private BigDecimal preco;
 	
-	public ServicoAdicional(String nome, String descricao, BigDecimal preco) {
+	public TipoPacote(String nome, String descricao) {
 		this.nome = nome;
 		this.descricao = descricao;
-		this.preco = preco;
 	}
 
-	public ServicoAdicional() {
+	public TipoPacote() {
 	}
 
 	public Long getId() {
@@ -48,17 +45,9 @@ public class ServicoAdicional {
 		this.descricao = descricao;
 	}
 
-	public BigDecimal getPreco() {
-		return preco;
-	}
-
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
-
 	@Override
 	public String toString() {
-		return "ServicoAdicional [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco + "]";
+		return "TipoPacote [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";
 	}
 	
 	public boolean insert() {
@@ -68,10 +57,10 @@ public class ServicoAdicional {
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
-			s.execute("INSERT INTO servicos_adicionais (nome, descricao, preco) VALUES (" +
+			s.execute("INSERT INTO tipos_pacote (nome, descricao) VALUES (" +
 			          "'" + nome + "', " +
-			          "'" + descricao + "', " + 
-			          preco + ");");
+			          "'" + descricao + "' " + 
+			          ");");
 			DBConexao.fecharConexao(con);
 
 			return true;
@@ -89,10 +78,9 @@ public class ServicoAdicional {
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
-			s.execute("UPDATE servicos_adicionais SET "
+			s.execute("UPDATE tipos_pacote SET "
 			        + "nome = '" + nome + "', "
-			        + "descricao = '" + descricao + "', "
-			        + "preco = '" + preco + "' "
+			        + "descricao = '" + descricao + "' "
 			        + "WHERE id = " + id + ";");
 			DBConexao.fecharConexao(con);
 
@@ -113,7 +101,7 @@ public class ServicoAdicional {
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
-			s.execute("DELETE FROM servicos_adicionais WHERE ID=" + id + ";");
+			s.execute("DELETE FROM tipos_pacote WHERE ID=" + id + ";");
 			DBConexao.fecharConexao(con);
 			
 			return true;
@@ -124,16 +112,16 @@ public class ServicoAdicional {
 		}
 	}
 
-	public static ServicoAdicional findById(Long id) {
-		ServicoAdicional sc = null;
+	public static TipoPacote findById(Long id) {
+		TipoPacote tp = null;
 
 	    try {
 	        var con = DBConexao.criarConexao();
 	        var s = con.createStatement();
-	        var rs = s.executeQuery("SELECT * FROM servicos_adicionais WHERE ID = " + id + ";");
+	        var rs = s.executeQuery("SELECT * FROM tipos_pacote WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	            sc = map(rs);
+	        	tp = map(rs);
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -141,26 +129,25 @@ public class ServicoAdicional {
 	        e.printStackTrace();
 	    }
 
-	    return sc;
+	    return tp;
 	}
 
-	private static ServicoAdicional map(ResultSet rs) throws SQLException {
-		ServicoAdicional sc;
-		sc = new ServicoAdicional();
-		sc.id = rs.getLong("ID");
-		sc.nome = rs.getString("nome");
-		sc.descricao = rs.getString("descricao");
-		sc.preco = rs.getBigDecimal("preco");
-		return sc;
+	private static TipoPacote map(ResultSet rs) throws SQLException {
+		TipoPacote tp;
+		tp = new TipoPacote();
+		tp.id = rs.getLong("ID");
+		tp.nome = rs.getString("nome");
+		tp.descricao = rs.getString("descricao");
+		return tp;
 	}
 
-	public static List<ServicoAdicional> findAll() {
-		List<ServicoAdicional> list = new ArrayList<ServicoAdicional>();
+	public static List<TipoPacote> findAll() {
+		List<TipoPacote> list = new ArrayList<TipoPacote>();
 
 	    try {
 	        var con = DBConexao.criarConexao();
 	        var s = con.createStatement();
-	        var rs = s.executeQuery("SELECT * FROM servicos_adicionais;");
+	        var rs = s.executeQuery("SELECT * FROM tipos_pacote;");
             
 	        while (rs.next()) {
 	        	list.add(map(rs));
@@ -173,5 +160,4 @@ public class ServicoAdicional {
 
 	    return list;
 	}
-	
 }

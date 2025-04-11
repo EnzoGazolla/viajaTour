@@ -16,13 +16,15 @@ public class PacoteViagem {
 	private String destino;
 	private int duracaoDias;
 	private BigDecimal precoBase;
+	private Long tipoPacoteId;
 	
-	public PacoteViagem(String nome, String descricao, String destino, int duracaoDias, BigDecimal precoBase) {
+	public PacoteViagem(String nome, String descricao, String destino, int duracaoDias, BigDecimal precoBase, Long tipoPacoteId) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.destino = destino;
 		this.duracaoDias = duracaoDias;
 		this.precoBase = precoBase;
+		this.tipoPacoteId = tipoPacoteId;
 	}
 	
 	public PacoteViagem() {
@@ -76,10 +78,18 @@ public class PacoteViagem {
 		this.precoBase = precoBase;
 	}
 
+	public Long getTipoPacoteId() {
+		return tipoPacoteId;
+	}
+
+	public void setTipoPacoteId(Long tipoPacoteId) {
+		this.tipoPacoteId = tipoPacoteId;
+	}
+
 	@Override
 	public String toString() {
 		return "PacoteViagem [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", destino=" + destino
-				+ ", duracaoDias=" + duracaoDias + ", precoBase=" + precoBase + "]";
+				+ ", duracaoDias=" + duracaoDias + ", precoBase=" + precoBase + ", tipoPacoteId= "+ tipoPacoteId +"]";
 	}
 	
 	public boolean insert() {
@@ -89,12 +99,14 @@ public class PacoteViagem {
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
-			s.execute("INSERT INTO pacotes_viagem (nome, descricao, destino, duracao_dias, preco_base) VALUES ("
+			s.execute("INSERT INTO pacotes_viagem (nome, descricao, destino, duracao_dias, preco_base, id_tipos_pacote) VALUES ("
 			        + "'" + nome + "', "
 			        + "'" + descricao + "', "
 			        + "'" + destino + "', "
 			        + duracaoDias + ", "
-			        + precoBase + ");");
+			        + precoBase + ", "
+			        + tipoPacoteId + " "
+			        + ");");
 			DBConexao.fecharConexao(con);
 
 			
@@ -119,7 +131,8 @@ public class PacoteViagem {
 			        + "descricao = '" + descricao + "', "
 			        + "destino = '" + destino + "', "
 			        + "duracao_dias = " + duracaoDias + ", "
-			        + "preco_base = " + precoBase + " "
+			        + "preco_base = " + precoBase + " , "
+			        + "id_tipos_pacote = " + tipoPacoteId + "  "
 			        + "WHERE id = " + id + ";");
 			DBConexao.fecharConexao(con);
 
@@ -180,6 +193,7 @@ public class PacoteViagem {
 		pc.destino = rs.getString("DESTINO");
 		pc.duracaoDias = rs.getInt("duracao_dias");
 		pc.precoBase = rs.getBigDecimal("preco_base");
+		pc.tipoPacoteId = rs.getLong("id_tipos_pacote");
 		return pc;
 	}
 
