@@ -1,4 +1,4 @@
-package com.enzoapps.viajatour.tela.cliente;
+package com.enzoapps.viajatour.tela;
 
 import java.awt.EventQueue;
 
