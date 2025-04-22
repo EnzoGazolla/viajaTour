@@ -13,8 +13,11 @@ import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class EditarTipoPacote extends JDialog {
@@ -23,6 +26,8 @@ public class EditarTipoPacote extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtNome;
 	private JTextField txtDescricao;
+	private ListarTipoPacote pai;
+	public TipoPacote tp = new TipoPacote();
 
 	/**
 	 * Launch the application.
@@ -31,9 +36,9 @@ public class EditarTipoPacote extends JDialog {
 		try {
 			new DBBanco().criarTabela();
 			new DBCarga().carregar();
-			EditarTipoPacote dialog = new EditarTipoPacote();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
+		//	EditarTipoPacote dialog = new EditarTipoPacote();
+		//	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		//	dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -42,7 +47,9 @@ public class EditarTipoPacote extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public EditarTipoPacote() {
+	public EditarTipoPacote(ListarTipoPacote pai) {
+		this.pai = pai;
+		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 436, 232);
@@ -76,11 +83,16 @@ public class EditarTipoPacote extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						TipoPacote tp = new TipoPacote();
+						
 						tp.setNome(txtNome.getText());
 						tp.setDescricao(txtDescricao.getText());
-						tp.insert();
-						System.out.println("insiriu no banco");
+						if (tp.getId() == null) {
+							tp.insert();
+						} else {
+							tp.update();
+						}
+						JOptionPane.showMessageDialog(pai, "Registro feito com sucesso","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+						EditarTipoPacote.this.dispose();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -93,5 +105,10 @@ public class EditarTipoPacote extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	@Override
+	public void dispose() {
+		super.dispose();
+		pai.carregarDados();
 	}
 }

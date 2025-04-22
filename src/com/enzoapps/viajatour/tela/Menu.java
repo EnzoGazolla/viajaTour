@@ -5,8 +5,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
+
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Menu extends JFrame {
 
@@ -58,6 +63,11 @@ public class Menu extends JFrame {
 		contentPane.add(btncadastroServiosAdicionais);
 		
 		JButton btnCadastroTipoPacote = new JButton("<html><head></head><body><center> Cadastro <br> Tipo <br> Pacote </center></body></html>");
+		btnCadastroTipoPacote.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ListarTipoPacote().setVisible(true);
+			}
+		});
 		btnCadastroTipoPacote.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnCadastroTipoPacote.setBounds(10, 208, 172, 172);
 		contentPane.add(btnCadastroTipoPacote);

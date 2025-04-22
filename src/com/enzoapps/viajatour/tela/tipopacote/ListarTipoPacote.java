@@ -17,6 +17,8 @@ import com.enzoapps.viajatour.util.DBCarga;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ListarTipoPacote extends JDialog {
 
@@ -71,17 +73,36 @@ public class ListarTipoPacote extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnNovo = new JButton("Novo");
+				btnNovo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						new EditarTipoPacote(ListarTipoPacote.this).setVisible(true);
+					}
+				});
+				buttonPane.add(btnNovo);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton btnEditar = new JButton("Editar");
+				btnEditar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				buttonPane.add(btnEditar);
+			}
+			{
+				JButton btnExcluir = new JButton("Excluir");
+				btnExcluir.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				buttonPane.add(btnExcluir);
 			}
 		}
+		carregarDados();
+	}
+
+	public void carregarDados() {
+		tableModel.setRowCount(0);
 		tipoPacote = TipoPacote.findAll();
 		for (TipoPacote tipoPacotes : tipoPacote) {
 			tableModel.addRow(new Object[] {tipoPacotes.getId(), tipoPacotes.getNome(), tipoPacotes.getDescricao() });
