@@ -94,10 +94,8 @@ public class TipoPacote {
 		
 	}
 
-	public boolean delete() {
+	public boolean delete() throws SQLException {
 		
-		try {
-
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
@@ -105,11 +103,7 @@ public class TipoPacote {
 			DBConexao.fecharConexao(con);
 			
 			return true;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
+			
 	}
 
 	public static TipoPacote findById(Long id) {

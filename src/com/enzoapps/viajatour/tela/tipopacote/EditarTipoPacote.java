@@ -111,4 +111,9 @@ public class EditarTipoPacote extends JDialog {
 		super.dispose();
 		pai.carregarDados();
 	}
+	public void setTipoPacote(TipoPacote tp) {
+		this.tp = tp;
+		txtNome.setText(tp.getNome());
+		txtDescricao.setText(tp.getDescricao());
+	}
 }

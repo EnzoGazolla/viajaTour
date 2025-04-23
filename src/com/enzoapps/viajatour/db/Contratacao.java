@@ -121,9 +121,7 @@ public class Contratacao {
 		
 	}
 
-	public boolean delete() {
-		
-		try {
+	public boolean delete() throws SQLException {
 
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
@@ -132,11 +130,6 @@ public class Contratacao {
 			DBConexao.fecharConexao(con);
 			
 			return true;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	public static Contratacao findById(Long id) {

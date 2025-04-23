@@ -106,10 +106,8 @@ public class ServicoAdicional {
 		
 	}
 
-	public boolean delete() {
+	public boolean delete() throws SQLException {
 		
-		try {
-
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
@@ -117,11 +115,6 @@ public class ServicoAdicional {
 			DBConexao.fecharConexao(con);
 			
 			return true;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	public static ServicoAdicional findById(Long id) {

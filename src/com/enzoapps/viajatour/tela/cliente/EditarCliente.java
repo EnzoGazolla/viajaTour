@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.enzoapps.viajatour.db.Cliente;
 import com.enzoapps.viajatour.db.TipoCliente;
+import com.enzoapps.viajatour.db.TipoPacote;
 import com.enzoapps.viajatour.tela.tipopacote.EditarTipoPacote;
 import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
 import java.awt.event.ActionListener;
@@ -152,5 +153,15 @@ public class EditarCliente extends JDialog {
 	public void dispose() {
 		super.dispose();
 		pai.carregarDados();
+	}
+	
+	public void setCliente(Cliente c) {
+		this.c = c;
+		txtNome.setText(c.getNome());
+		txtTelefone.setText(c.getTelefone());
+		txtEmail.setText(c.getEmail());
+		txtCPF.setText(c.getCpf());
+		txtPassaporte.setText(c.getPassaporte());
+		cbxTipoCliente.setSelectedItem(c.getTipo());
 	}
 }

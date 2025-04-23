@@ -146,9 +146,7 @@ public class PacoteViagem {
 		
 	}
 
-	public boolean delete() {
-		
-		try {
+	public boolean delete() throws SQLException {
 
 			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
@@ -157,11 +155,6 @@ public class PacoteViagem {
 			DBConexao.fecharConexao(con);
 			
 			return true;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	public static PacoteViagem findById(Long id) {

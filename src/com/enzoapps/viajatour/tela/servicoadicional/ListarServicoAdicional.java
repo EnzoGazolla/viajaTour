@@ -6,11 +6,13 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.enzoapps.viajatour.db.ServicoAdicional;
+import com.enzoapps.viajatour.tela.cliente.ListarCliente;
 import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
@@ -88,6 +90,28 @@ public class ListarServicoAdicional extends JDialog {
 			JButton btnExcluir = new JButton("Excluir");
 			btnExcluir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int linhaSelecionada = table.getSelectedRow();
+
+					if (linhaSelecionada == -1) {
+					    JOptionPane.showMessageDialog(ListarServicoAdicional.this, "Nenhuma opcao selecionada!", "Erro", JOptionPane.ERROR_MESSAGE);
+					    return;
+					}
+					
+					var selecionado = servicos.get(linhaSelecionada);
+					
+					int resposta = JOptionPane.showConfirmDialog(ListarServicoAdicional.this, "Deseja excluir?", "Confirmar exclusao", 
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					if (resposta == JOptionPane.YES_OPTION) {
+						try {
+							selecionado.delete();
+						} catch (Exception e1) {
+							JOptionPane.showMessageDialog(ListarServicoAdicional.this, "Esse registro nao pode ser excluido", "Erro", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						JOptionPane.showMessageDialog(ListarServicoAdicional.this, "Excluido com sucesso", "Sucesso", 
+								JOptionPane.INFORMATION_MESSAGE);
+						carregarDados();
+					}
 				}
 			});
 			buttonPane.add(btnExcluir);

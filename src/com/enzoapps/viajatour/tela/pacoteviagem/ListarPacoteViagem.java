@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import com.enzoapps.viajatour.db.Cliente;
 import com.enzoapps.viajatour.db.PacoteViagem;
 import com.enzoapps.viajatour.db.TipoPacote;
+import com.enzoapps.viajatour.tela.cliente.ListarCliente;
 import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
@@ -93,6 +95,28 @@ public class ListarPacoteViagem extends JDialog {
 				JButton btnExcluir = new JButton("Excluir");
 				btnExcluir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int linhaSelecionada = table.getSelectedRow();
+
+						if (linhaSelecionada == -1) {
+						    JOptionPane.showMessageDialog(ListarPacoteViagem.this, "Nenhuma opcao selecionada!", "Erro", JOptionPane.ERROR_MESSAGE);
+						    return;
+						}
+						
+						var selecionado = pacotes.get(linhaSelecionada);
+						
+						int resposta = JOptionPane.showConfirmDialog(ListarPacoteViagem.this, "Deseja excluir?", "Confirmar exclusao", 
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						if (resposta == JOptionPane.YES_OPTION) {
+							try {
+								selecionado.delete();
+							} catch (Exception e1) {
+								JOptionPane.showMessageDialog(ListarPacoteViagem.this, "Esse registro nao pode ser excluido", "Erro", JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+							JOptionPane.showMessageDialog(ListarPacoteViagem.this, "Excluido com sucesso", "Sucesso", 
+									JOptionPane.INFORMATION_MESSAGE);
+							carregarDados();
+						}
 					}
 				});
 				buttonPane.add(btnExcluir);

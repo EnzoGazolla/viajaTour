@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +27,7 @@ public class ListarTipoPacote extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private List<TipoPacote> tipoPacote;
+	private List<TipoPacote> tipoPacotes;
 
 	/**
 	 * Launch the application.
@@ -85,6 +86,17 @@ public class ListarTipoPacote extends JDialog {
 				JButton btnEditar = new JButton("Editar");
 				btnEditar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int linhaSelecionada = table.getSelectedRow();
+
+						if (linhaSelecionada == -1) {
+						    JOptionPane.showMessageDialog(ListarTipoPacote.this, "Nenhum cliente selecionado!", "Erro", JOptionPane.ERROR_MESSAGE);
+						    return;
+						}
+						
+						var selecionado = tipoPacotes.get(linhaSelecionada);
+						var editar = new EditarTipoPacote(ListarTipoPacote.this);
+						editar.setTipoPacote(selecionado);
+						editar.setVisible(true);
 					}
 				});
 				buttonPane.add(btnEditar);
@@ -93,6 +105,29 @@ public class ListarTipoPacote extends JDialog {
 				JButton btnExcluir = new JButton("Excluir");
 				btnExcluir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int linhaSelecionada = table.getSelectedRow();
+
+						if (linhaSelecionada == -1) {
+						    JOptionPane.showMessageDialog(ListarTipoPacote.this, "Nenhuma opcao selecionada!", "Erro", JOptionPane.ERROR_MESSAGE);
+						    return;
+						}
+						
+						var selecionado = tipoPacotes.get(linhaSelecionada);
+						
+						int resposta = JOptionPane.showConfirmDialog(ListarTipoPacote.this, "Deseja excluir?", "Confirmar exclusao", 
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						if (resposta == JOptionPane.YES_OPTION) {
+							try {
+								selecionado.delete();
+							} catch (Exception e1) {
+								JOptionPane.showMessageDialog(ListarTipoPacote.this, "Esse registro nao pode ser excluido", "Erro", JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+							JOptionPane.showMessageDialog(ListarTipoPacote.this, "Excluido com sucesso", "Sucesso", 
+									JOptionPane.INFORMATION_MESSAGE);
+							carregarDados();
+						}
+							
 					}
 				});
 				buttonPane.add(btnExcluir);
@@ -103,8 +138,8 @@ public class ListarTipoPacote extends JDialog {
 
 	public void carregarDados() {
 		tableModel.setRowCount(0);
-		tipoPacote = TipoPacote.findAll();
-		for (TipoPacote tipoPacotes : tipoPacote) {
+		tipoPacotes = TipoPacote.findAll();
+		for (TipoPacote tipoPacotes : tipoPacotes) {
 			tableModel.addRow(new Object[] {tipoPacotes.getId(), tipoPacotes.getNome(), tipoPacotes.getDescricao() });
 		}
 	}
