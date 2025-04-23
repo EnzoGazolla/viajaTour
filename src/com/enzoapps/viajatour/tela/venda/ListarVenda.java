@@ -14,11 +14,15 @@ import com.enzoapps.viajatour.db.Cliente;
 import com.enzoapps.viajatour.db.Contratacao;
 import com.enzoapps.viajatour.db.PacoteViagem;
 import com.enzoapps.viajatour.db.TipoPacote;
+import com.enzoapps.viajatour.tela.tipopacote.EditarTipoPacote;
+import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
 import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ListarVenda extends JDialog {
 
@@ -60,10 +64,11 @@ public class ListarVenda extends JDialog {
 			contentPanel.add(scrollPane);
 			{
 
-				tableModel = new DefaultTableModel(new Object[] {"ID", "ClienteID", "PacoteViagemID", "DataContratacao", "ValorTotal"}, 0) {
+				tableModel = new DefaultTableModel(
+						new Object[] { "ID", "ClienteID", "PacoteViagemID", "DataContratacao", "ValorTotal" }, 0) {
 					private static final long serialVersionUID = 1L;
 				};
-				
+
 				table = new JTable(tableModel);
 				scrollPane.setViewportView(table);
 			}
@@ -74,24 +79,44 @@ public class ListarVenda extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnNovo = new JButton("Novo");
+				btnNovo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+	//					new EditarVenda(ListarVenda.this).setVisible(true);
+					}
+				});
+				buttonPane.add(btnNovo);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton btnEditar = new JButton("Editar");
+				btnEditar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				buttonPane.add(btnEditar);
+			}
+			{
+				JButton btnExcluir = new JButton("Excluir");
+				btnExcluir.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				buttonPane.add(btnExcluir);
 			}
 		}
-		
+		carregarDados();
+	}
+
+	public void carregarDados() {
+		tableModel.setRowCount(0);
 		vendas = Contratacao.findAll();
 		for (Contratacao contratacao : vendas) {
-			tableModel.addRow(new Object[] {contratacao.getId(), Cliente.findById(contratacao.getClienteId()).getNome(), 
-					PacoteViagem.findById(contratacao.getPacoteViagemId()).getNome(), contratacao.getDataContratacao(), contratacao.getValorTotal()});
+			tableModel
+					.addRow(new Object[] { contratacao.getId(), Cliente.findById(contratacao.getClienteId()).getNome(),
+							PacoteViagem.findById(contratacao.getPacoteViagemId()).getNome(),
+							contratacao.getDataContratacao(), contratacao.getValorTotal() });
 		}
-		
+
 	}
 
 }

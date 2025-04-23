@@ -7,7 +7,7 @@ public class DBBanco {
 	public void criarTabela() {
 
 		try {
-			var con = new DBConexao().criarConexao();
+			var con = DBConexao.criarConexao();
 			var s = con.createStatement();
 
 			s.execute("CREATE TABLE IF NOT EXISTS clientes (" 

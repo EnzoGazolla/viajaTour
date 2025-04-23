@@ -6,7 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.enzoapps.viajatour.tela.cliente.ListarCliente;
+import com.enzoapps.viajatour.tela.pacoteviagem.ListarPacoteViagem;
+import com.enzoapps.viajatour.tela.servicoadicional.ListarServicoAdicional;
 import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
+import com.enzoapps.viajatour.tela.venda.ListarVenda;
 
 import javax.swing.JButton;
 import java.awt.Font;
@@ -48,16 +52,31 @@ public class Menu extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnClientes = new JButton("<html><head></head><body>Cadastro <br> Clientes</body></html>");
+		btnClientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ListarCliente().setVisible(true);
+			}
+		});
 		btnClientes.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnClientes.setBounds(10, 22, 172, 172);
 		contentPane.add(btnClientes);
 		
 		JButton btncadastroPacotes = new JButton("<html><head></head><body>Cadastro <br> Pacotes</body></html>");
+		btncadastroPacotes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ListarPacoteViagem().setVisible(true);
+			}
+		});
 		btncadastroPacotes.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btncadastroPacotes.setBounds(210, 22, 172, 172);
 		contentPane.add(btncadastroPacotes);
 		
 		JButton btncadastroServiosAdicionais = new JButton("<html><head></head><body>Cadastro <br> Serviços <br> Adicionais</body></html>");
+		btncadastroServiosAdicionais.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ListarServicoAdicional().setVisible(true);
+			}
+		});
 		btncadastroServiosAdicionais.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btncadastroServiosAdicionais.setBounds(404, 22, 172, 172);
 		contentPane.add(btncadastroServiosAdicionais);
@@ -73,6 +92,11 @@ public class Menu extends JFrame {
 		contentPane.add(btnCadastroTipoPacote);
 		
 		JButton btnVendaPacote = new JButton("<html><head></head><body><center> Venda <br> Pacote </center></body></html>");
+		btnVendaPacote.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ListarVenda().setVisible(true);
+			}
+		});
 		btnVendaPacote.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnVendaPacote.setBounds(210, 208, 172, 172);
 		contentPane.add(btnVendaPacote);

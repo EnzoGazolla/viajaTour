@@ -18,6 +18,8 @@ import com.enzoapps.viajatour.util.DBCarga;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ListarPacoteViagem extends JDialog {
 
@@ -53,16 +55,16 @@ public class ListarPacoteViagem extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(22, 26, 404, 196);
 		contentPanel.add(scrollPane);
-		
-		tableModel = new DefaultTableModel (new Object[] {"ID", "Nome", "Descricao", "Destino", "DuracaoDias", "Preco Base", "TipoPacote"}, 0 ){
+
+		tableModel = new DefaultTableModel(
+				new Object[] { "ID", "Nome", "Descricao", "Destino", "DuracaoDias", "Preco Base", "TipoPacote" }, 0) {
 			private static final long serialVersionUID = 1L;
 		};
-		
-		
+
 		table = new JTable(tableModel);
 		scrollPane.setViewportView(table);
 		{
@@ -71,22 +73,42 @@ public class ListarPacoteViagem extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnNovo = new JButton("Novo");
+				btnNovo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+		//				new EditarPacoteViagem(ListarPacoteViagem.this).setVisible(true);
+					}
+				});
+				buttonPane.add(btnNovo);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton btnEditar = new JButton("Editar");
+				btnEditar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				buttonPane.add(btnEditar);
+			}
+			{
+				JButton btnExcluir = new JButton("Excluir");
+				btnExcluir.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				buttonPane.add(btnExcluir);
 			}
 		}
-		
+
+		carregarDados();
+	}
+
+	public void carregarDados() {
+		tableModel.setRowCount(0);
 		pacotes = PacoteViagem.findAll();
 		for (PacoteViagem pacote : pacotes) {
-			tableModel.addRow(new Object[] {pacote.getId(), pacote.getNome(), pacote.getDescricao(), pacote.getDestino(), pacote.getDuracaoDias(), 
-					pacote.getPrecoBase(), TipoPacote.findById(pacote.getTipoPacoteId()).getNome()});
+			tableModel.addRow(new Object[] { pacote.getId(), pacote.getNome(), pacote.getDescricao(),
+					pacote.getDestino(), pacote.getDuracaoDias(), pacote.getPrecoBase(),
+					TipoPacote.findById(pacote.getTipoPacoteId()).getNome() });
 		}
 	}
 }

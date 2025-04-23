@@ -1,4 +1,4 @@
- package com.enzoapps.viajatour.tela.servicoadicional;
+package com.enzoapps.viajatour.tela.servicoadicional;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -16,6 +16,8 @@ import com.enzoapps.viajatour.util.DBCarga;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ListarServicoAdicional extends JDialog {
 
@@ -51,15 +53,15 @@ public class ListarServicoAdicional extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 10, 436, 212);
 		contentPanel.add(scrollPane);
-		
-		tableModel = new DefaultTableModel(new Object[] {"ID", "Nome", "Descricao", "Preco"}, 0) {
+
+		tableModel = new DefaultTableModel(new Object[] { "ID", "Nome", "Descricao", "Preco" }, 0) {
 			private static final long serialVersionUID = 1L;
 		};
-		
+
 		table = new JTable(tableModel);
 		scrollPane.setViewportView(table);
 		{
@@ -67,21 +69,39 @@ public class ListarServicoAdicional extends JDialog {
 			buttonPane.setBounds(0, 232, 436, 31);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
+
+			JButton btnNovo = new JButton("Novo");
+			btnNovo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					// new EditarServicoAdicional(ListarServicoAdicional.this).setVisible(true);
+				}
+			});
+			buttonPane.add(btnNovo);
+
+			JButton btnEditar = new JButton("Editar");
+			btnEditar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			buttonPane.add(btnEditar);
+
+			JButton btnExcluir = new JButton("Excluir");
+			btnExcluir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			buttonPane.add(btnExcluir);
 		}
+		carregarDados();
+
+	}
+
+	public void carregarDados() {
+		tableModel.setRowCount(0);
 		servicos = ServicoAdicional.findAll();
 		for (ServicoAdicional servico : servicos) {
-			tableModel.addRow(new Object[] {servico.getId(), servico.getNome(), servico.getDescricao(), servico.getPreco()});
+			tableModel.addRow(
+					new Object[] { servico.getId(), servico.getNome(), servico.getDescricao(), servico.getPreco() });
 		}
 	}
 }

@@ -185,7 +185,14 @@ public class Cliente {
 		c.nome = rs.getString("NOME");
 		c.telefone = rs.getString("TELEFONE");
 		c.email = rs.getString("EMAIL");
-		c.tipo = "NACIONAL".equals(rs.getString("TIPO_CLIENTE")) ? TipoCliente.NACIONAL : TipoCliente.ESTRANGEIRO;
+		String tipoBanco = rs.getString("TIPO_CLIENTE").toUpperCase().trim();
+	    if ("NACIONAL".equals(tipoBanco)) {
+	        c.tipo = TipoCliente.NACIONAL;
+	    } else if ("ESTRANGEIRO".equals(tipoBanco)) {
+	        c.tipo = TipoCliente.ESTRANGEIRO; 
+	    } else {
+	        throw new SQLException("Tipo de cliente inválido: " + tipoBanco);
+	    }
 		c.cpf = rs.getString("CPF");
 		c.passaporte = rs.getString("PASSAPORTE");
 		return c;
