@@ -29,20 +29,6 @@ public class EditarTipoPacote extends JDialog {
 	private ListarTipoPacote pai;
 	public TipoPacote tp = new TipoPacote();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			new DBBanco().criarTabela();
-			new DBCarga().carregar();
-		//	EditarTipoPacote dialog = new EditarTipoPacote();
-		//	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		//	dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
@@ -98,11 +84,6 @@ public class EditarTipoPacote extends JDialog {
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
 			}
 		}
 	}

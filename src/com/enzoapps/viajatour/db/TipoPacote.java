@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
@@ -47,7 +48,20 @@ public class TipoPacote {
 
 	@Override
 	public String toString() {
-		return "TipoPacote [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";
+		return nome;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    TipoPacote that = (TipoPacote) obj;
+	    return Objects.equals(id, that.id); 
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(id);
 	}
 	
 	public boolean insert() {

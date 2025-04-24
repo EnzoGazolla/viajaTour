@@ -16,6 +16,8 @@ import com.enzoapps.viajatour.db.Contratacao;
 import com.enzoapps.viajatour.db.PacoteViagem;
 import com.enzoapps.viajatour.db.TipoPacote;
 import com.enzoapps.viajatour.tela.cliente.ListarCliente;
+import com.enzoapps.viajatour.tela.pacoteviagem.EditarPacoteViagem;
+import com.enzoapps.viajatour.tela.pacoteviagem.ListarPacoteViagem;
 import com.enzoapps.viajatour.tela.tipopacote.EditarTipoPacote;
 import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
 import com.enzoapps.viajatour.util.DBBanco;
@@ -34,20 +36,6 @@ public class ListarVenda extends JDialog {
 	private DefaultTableModel tableModel;
 	private List<Contratacao> vendas;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			new DBBanco().criarTabela();
-			new DBCarga().carregar();
-			ListarVenda dialog = new ListarVenda();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
@@ -84,7 +72,7 @@ public class ListarVenda extends JDialog {
 				JButton btnNovo = new JButton("Novo");
 				btnNovo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-	//					new EditarVenda(ListarVenda.this).setVisible(true);
+						new EditarVenda(ListarVenda.this).setVisible(true);
 					}
 				});
 				buttonPane.add(btnNovo);
@@ -93,6 +81,17 @@ public class ListarVenda extends JDialog {
 				JButton btnEditar = new JButton("Editar");
 				btnEditar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int linhaSelecionada = table.getSelectedRow();
+
+						if (linhaSelecionada == -1) {
+						    JOptionPane.showMessageDialog(ListarVenda.this, "Nenhuma venda selecionada!", "Erro", JOptionPane.ERROR_MESSAGE);
+						    return;
+						}
+						
+						var selecionado = vendas.get(linhaSelecionada);
+						var editar = new EditarVenda(ListarVenda.this);
+						editar.setContratacao(selecionado);
+						editar.setVisible(true);
 					}
 				});
 				buttonPane.add(btnEditar);

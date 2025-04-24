@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
@@ -88,8 +89,20 @@ public class PacoteViagem {
 
 	@Override
 	public String toString() {
-		return "PacoteViagem [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", destino=" + destino
-				+ ", duracaoDias=" + duracaoDias + ", precoBase=" + precoBase + ", tipoPacoteId= "+ tipoPacoteId +"]";
+		return nome;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    PacoteViagem that = (PacoteViagem) obj;
+	    return Objects.equals(id, that.id); 
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(id);
 	}
 	
 	public boolean insert() {

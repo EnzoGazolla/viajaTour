@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.h2.tools.Server;
 
@@ -91,10 +92,23 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", email=" + email + ", tipo=" + tipo
-				+ ", cpf=" + cpf + ", passaporte=" + passaporte + "]";
+		return nome;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+	    Cliente that = (Cliente) obj;
+	    return Objects.equals(id, that.id); 
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(id);
+	}
+	
+	
 	public boolean insert() {
 
 		try {

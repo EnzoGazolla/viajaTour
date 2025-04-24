@@ -102,6 +102,11 @@ public class Menu extends JFrame {
 		contentPane.add(btnVendaPacote);
 		
 		JButton btnSobre = new JButton("<html><head></head><body><center> Sobre </center></body></html>");
+		btnSobre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Sobre().setVisible(true);
+			}
+		});
 		btnSobre.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnSobre.setBounds(404, 208, 172, 172);
 		contentPane.add(btnSobre);

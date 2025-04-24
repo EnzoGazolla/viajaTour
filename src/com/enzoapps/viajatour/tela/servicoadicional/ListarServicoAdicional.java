@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.enzoapps.viajatour.db.ServicoAdicional;
 import com.enzoapps.viajatour.tela.cliente.ListarCliente;
+import com.enzoapps.viajatour.tela.tipopacote.EditarTipoPacote;
+import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
 import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
@@ -29,20 +31,6 @@ public class ListarServicoAdicional extends JDialog {
 	private DefaultTableModel tableModel;
 	private List<ServicoAdicional> servicos;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			new DBBanco().criarTabela();
-			new DBCarga().carregar();
-			ListarServicoAdicional dialog = new ListarServicoAdicional();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
@@ -75,7 +63,7 @@ public class ListarServicoAdicional extends JDialog {
 			JButton btnNovo = new JButton("Novo");
 			btnNovo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// new EditarServicoAdicional(ListarServicoAdicional.this).setVisible(true);
+					 new EditarServicoAdicional(ListarServicoAdicional.this).setVisible(true);
 				}
 			});
 			buttonPane.add(btnNovo);
@@ -83,6 +71,17 @@ public class ListarServicoAdicional extends JDialog {
 			JButton btnEditar = new JButton("Editar");
 			btnEditar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int linhaSelecionada = table.getSelectedRow();
+
+					if (linhaSelecionada == -1) {
+					    JOptionPane.showMessageDialog(ListarServicoAdicional.this, "Nenhum serviço selecionado!", "Erro", JOptionPane.ERROR_MESSAGE);
+					    return;
+					}
+					
+					var selecionado = servicos.get(linhaSelecionada);
+					var editar = new EditarServicoAdicional(ListarServicoAdicional.this);
+					editar.setServicoAdicional(selecionado);
+					editar.setVisible(true);
 				}
 			});
 			buttonPane.add(btnEditar);

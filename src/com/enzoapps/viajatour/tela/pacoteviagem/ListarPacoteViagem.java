@@ -15,6 +15,8 @@ import com.enzoapps.viajatour.db.Cliente;
 import com.enzoapps.viajatour.db.PacoteViagem;
 import com.enzoapps.viajatour.db.TipoPacote;
 import com.enzoapps.viajatour.tela.cliente.ListarCliente;
+import com.enzoapps.viajatour.tela.tipopacote.EditarTipoPacote;
+import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
 import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
@@ -31,20 +33,6 @@ public class ListarPacoteViagem extends JDialog {
 	private DefaultTableModel tableModel;
 	private List<PacoteViagem> pacotes;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			new DBBanco().criarTabela();
-			new DBCarga().carregar();
-			ListarPacoteViagem dialog = new ListarPacoteViagem();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
@@ -78,7 +66,7 @@ public class ListarPacoteViagem extends JDialog {
 				JButton btnNovo = new JButton("Novo");
 				btnNovo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-		//				new EditarPacoteViagem(ListarPacoteViagem.this).setVisible(true);
+						new EditarPacoteViagem(ListarPacoteViagem.this).setVisible(true);
 					}
 				});
 				buttonPane.add(btnNovo);
@@ -87,6 +75,17 @@ public class ListarPacoteViagem extends JDialog {
 				JButton btnEditar = new JButton("Editar");
 				btnEditar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						int linhaSelecionada = table.getSelectedRow();
+
+						if (linhaSelecionada == -1) {
+						    JOptionPane.showMessageDialog(ListarPacoteViagem.this, "Nenhum pacote selecionado!", "Erro", JOptionPane.ERROR_MESSAGE);
+						    return;
+						}
+						
+						var selecionado = pacotes.get(linhaSelecionada);
+						var editar = new EditarPacoteViagem(ListarPacoteViagem.this);
+						editar.setPacoteViagem(selecionado);
+						editar.setVisible(true);
 					}
 				});
 				buttonPane.add(btnEditar);

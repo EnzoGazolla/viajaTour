@@ -29,20 +29,6 @@ public class ListarTipoPacote extends JDialog {
 	private DefaultTableModel tableModel;
 	private List<TipoPacote> tipoPacotes;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			new DBBanco().criarTabela();
-			new DBCarga().carregar();
-			ListarTipoPacote dialog = new ListarTipoPacote();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
