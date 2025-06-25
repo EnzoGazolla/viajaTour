@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
+//Classe que representa um pacote de viagem (produto vendido no sistema)
 public class PacoteViagem {
 	
 	private Long id;
@@ -17,8 +18,9 @@ public class PacoteViagem {
 	private String destino;
 	private int duracaoDias;
 	private BigDecimal precoBase;
-	private Long tipoPacoteId;
+	private Long tipoPacoteId; // FK para TipoPacote
 	
+	// Construtor com parâmetros
 	public PacoteViagem(String nome, String descricao, String destino, int duracaoDias, BigDecimal precoBase, Long tipoPacoteId) {
 		this.nome = nome;
 		this.descricao = descricao;
@@ -28,9 +30,11 @@ public class PacoteViagem {
 		this.tipoPacoteId = tipoPacoteId;
 	}
 	
+	// Construtor vazio
 	public PacoteViagem() {
 	}
-
+	
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -86,12 +90,14 @@ public class PacoteViagem {
 	public void setTipoPacoteId(Long tipoPacoteId) {
 		this.tipoPacoteId = tipoPacoteId;
 	}
-
+	
+	// Representação textual (para exibir em listas etc.)
 	@Override
 	public String toString() {
 		return nome;
 	}
 	
+	// Compara dois objetos PacoteViagem com base no ID
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;
@@ -105,6 +111,7 @@ public class PacoteViagem {
 	    return Objects.hash(id);
 	}
 	
+	// Insere um novo pacote de viagem no banco de dados
 	public boolean insert() {
 
 		try {
@@ -132,6 +139,7 @@ public class PacoteViagem {
 		
 	}
 	
+	// Atualiza um pacote existente no banco
 	public boolean update() {
 
 		try {
@@ -158,7 +166,8 @@ public class PacoteViagem {
 		}
 		
 	}
-
+	
+	// Exclui um pacote com base no ID
 	public boolean delete() throws SQLException {
 
 			var con = DBConexao.criarConexao();
@@ -169,7 +178,8 @@ public class PacoteViagem {
 			
 			return true;
 	}
-
+	
+	// Busca um pacote de viagem pelo ID
 	public static PacoteViagem findById(Long id) {
 		PacoteViagem pc = null;
 
@@ -179,7 +189,7 @@ public class PacoteViagem {
 	        var rs = s.executeQuery("SELECT * FROM pacotes_viagem WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	            pc = map(rs);
+	            pc = map(rs); // Mapeia os dados do banco para objeto Java
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -189,7 +199,8 @@ public class PacoteViagem {
 
 	    return pc;
 	}
-
+	
+	// Converte os dados do banco em um objeto PacoteViagem
 	private static PacoteViagem map(ResultSet rs) throws SQLException {
 		PacoteViagem pc;
 		pc = new PacoteViagem();
@@ -203,7 +214,7 @@ public class PacoteViagem {
 		return pc;
 	}
 
-
+	// Retorna todos os pacotes cadastrados
 	public static List<PacoteViagem> findAll() {
 		List<PacoteViagem> list = new ArrayList<PacoteViagem>();
 

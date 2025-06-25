@@ -114,6 +114,8 @@ try {
 			var servec = new ServicoContratado(vendaId, servicoId);
 			servec.insert();
 			
+			
+			
 			var listaServicoContratado = ServicoContratado.findAll();
 			for (ServicoContratado sc : listaServicoContratado) {
 				System.out.println(sc);

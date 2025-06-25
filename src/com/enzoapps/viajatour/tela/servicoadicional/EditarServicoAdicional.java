@@ -35,6 +35,7 @@ public class EditarServicoAdicional extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	 // Construtor do diálogo de edição/criação de serviço adicional
 	public EditarServicoAdicional(ListarServicoAdicional pai) {
 		this.pai = pai;
 		
@@ -45,33 +46,39 @@ public class EditarServicoAdicional extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
+			// Label para campo Nome
 		{
 			JLabel lblNome = new JLabel("Nome:");
 			lblNome.setBounds(20, 65, 61, 13);
 			contentPanel.add(lblNome);
 		}
+			// Label para campo Descrição
 		{
 			JLabel lblDescricao = new JLabel("Descrição:");
 			lblDescricao.setBounds(20, 106, 76, 13);
 			contentPanel.add(lblDescricao);
 		}
+			// Label para campo Preço
 		{
 			JLabel lblPreco = new JLabel("Preço:");
 			lblPreco.setBounds(20, 148, 61, 13);
 			contentPanel.add(lblPreco);
 		}
+			// Campo de texto para Nome
 		{
 			textNome = new JTextField();
 			textNome.setBounds(117, 62, 288, 19);
 			contentPanel.add(textNome);
 			textNome.setColumns(10);
 		}
+		 	// Campo de texto para Descrição
 		{
 			textDescricao = new JTextField();
 			textDescricao.setBounds(117, 103, 288, 19);
 			contentPanel.add(textDescricao);
 			textDescricao.setColumns(10);
 		}
+			// Campo de texto para Preço
 		{
 			textPreco = new JTextField();
 			textPreco.setBounds(117, 145, 288, 19);
@@ -88,6 +95,7 @@ public class EditarServicoAdicional extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						// Valida se o campo Descrição não está vazio
 						if (textNome.getText().isEmpty() || textNome.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O Nome esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -100,12 +108,14 @@ public class EditarServicoAdicional extends JDialog {
 							return;
 						}
 						
+						// Valida o valor do preço
 						var valor = validaValor(textPreco.getText());
 						if (valor.compareTo(BigDecimal.ZERO) == 0) {
 							JOptionPane.showMessageDialog(pai, "O valor do preco esta incorreto", "Error",
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
+						// Atualiza os dados do serviço adicional
 						sa.setNome(textNome.getText());
 						sa.setDescricao(textDescricao.getText());
 						sa.setPreco(valor);
@@ -125,11 +135,14 @@ public class EditarServicoAdicional extends JDialog {
 			}
 		}
 	}
+	
+	// Ao fechar o diálogo, recarrega os dados na tela pai
 	@Override
 	public void dispose() {
 		super.dispose();
 		pai.carregarDados();
 	}
+	// Método para preencher os campos do formulário com os dados do serviço adicional selecionado
 	public void setServicoAdicional(ServicoAdicional sa) {
 		this.sa = sa;
 		textNome.setText(sa.getNome());
@@ -137,13 +150,12 @@ public class EditarServicoAdicional extends JDialog {
 		textPreco.setText(sa.getPreco().toString());
 	}
 	
-	/**
-	 * Método para validar se uma String pode ser convertida para BigDecimal
-	 * Verifica se a string possui formato numérico válido
-	 * Aceita formatos com vírgula ou ponto como separador decimal
-	 * @param valor String contendo o valor a ser validado
-	 * @return true se a string for um número válido, false caso contrário
-	 */
+	/* Método para validar se uma String pode ser convertida para BigDecimal
+	  Verifica se a string possui formato numérico válido
+	  Aceita formatos com vírgula ou ponto como separador decimal
+	  @param valor String contendo o valor a ser validado
+	  @return true se a string for um número válido, false caso contrário */
+	
 	private BigDecimal validaValor(String valor) {
 	    // Verifica se o valor não é nulo ou vazio
 	    if (valor == null || valor.trim().isEmpty()) {

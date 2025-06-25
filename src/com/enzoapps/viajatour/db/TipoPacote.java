@@ -8,20 +8,24 @@ import java.util.Objects;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
+//Classe que representa um tipo de pacote de viagem 
 public class TipoPacote {
 	
 	private Long id;
 	private String nome;
 	private String descricao;
 	
+	// Construtor com parâmetros
 	public TipoPacote(String nome, String descricao) {
 		this.nome = nome;
 		this.descricao = descricao;
 	}
-
+	
+	// Construtor vazio (necessário para frameworks e JDBC)
 	public TipoPacote() {
 	}
-
+	
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -46,11 +50,13 @@ public class TipoPacote {
 		this.descricao = descricao;
 	}
 
+	// Define o nome como representação textual do objeto
 	@Override
 	public String toString() {
 		return nome;
 	}
 	
+	// Compara dois objetos TipoPacote pelo id
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;
@@ -64,6 +70,7 @@ public class TipoPacote {
 	    return Objects.hash(id);
 	}
 	
+	// Insere um novo tipo de pacote no banco de dados
 	public boolean insert() {
 
 		try {
@@ -85,6 +92,7 @@ public class TipoPacote {
 		}
 	}
 	
+	// Atualiza os dados de um tipo de pacote existente
 	public boolean update() {
 
 		try {
@@ -107,7 +115,8 @@ public class TipoPacote {
 		}
 		
 	}
-
+	
+	// Exclui um tipo de pacote do banco de dados pelo ID
 	public boolean delete() throws SQLException {
 		
 			var con = DBConexao.criarConexao();
@@ -119,7 +128,8 @@ public class TipoPacote {
 			return true;
 			
 	}
-
+	
+	// Busca um tipo de pacote pelo ID
 	public static TipoPacote findById(Long id) {
 		TipoPacote tp = null;
 
@@ -129,7 +139,7 @@ public class TipoPacote {
 	        var rs = s.executeQuery("SELECT * FROM tipos_pacote WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	        	tp = map(rs);
+	        	tp = map(rs); // Mapeia o resultado para um objeto TipoPacote
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -139,7 +149,8 @@ public class TipoPacote {
 
 	    return tp;
 	}
-
+	
+	// Converte o resultado do banco (ResultSet) em um objeto TipoPacote
 	private static TipoPacote map(ResultSet rs) throws SQLException {
 		TipoPacote tp;
 		tp = new TipoPacote();
@@ -148,7 +159,8 @@ public class TipoPacote {
 		tp.descricao = rs.getString("descricao");
 		return tp;
 	}
-
+	
+	// Retorna todos os tipos de pacote cadastrados
 	public static List<TipoPacote> findAll() {
 		List<TipoPacote> list = new ArrayList<TipoPacote>();
 
@@ -158,7 +170,7 @@ public class TipoPacote {
 	        var rs = s.executeQuery("SELECT * FROM tipos_pacote;");
             
 	        while (rs.next()) {
-	        	list.add(map(rs));
+	        	list.add(map(rs)); // Adiciona cada tipo à lista
 	        }
 
 	        DBConexao.fecharConexao(con);

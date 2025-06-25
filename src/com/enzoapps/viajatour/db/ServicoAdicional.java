@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
+// Classe do Servico adicional 
 public class ServicoAdicional {
 	
 	private Long id;
@@ -15,15 +16,18 @@ public class ServicoAdicional {
 	private String descricao;
 	private BigDecimal preco;
 	
+	// Construtor com parâmetros
 	public ServicoAdicional(String nome, String descricao, BigDecimal preco) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 	}
-
+	
+	// Construtor vazio (necessário para mapeamento do banco)
 	public ServicoAdicional() {
 	}
-
+	
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -55,12 +59,14 @@ public class ServicoAdicional {
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
-
+	
+	// Representação do objeto como string (útil para exibição no console)
 	@Override
 	public String toString() {
 		return "ServicoAdicional [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco + "]";
 	}
 	
+	// Insere um novo serviço adicional no banco
 	public boolean insert() {
 
 		try {
@@ -82,6 +88,7 @@ public class ServicoAdicional {
 		}
 	}
 	
+	// Atualiza um serviço adicional existente
 	public boolean update() {
 
 		try {
@@ -105,7 +112,8 @@ public class ServicoAdicional {
 		}
 		
 	}
-
+	
+	// Exclui um serviço adicional do banco
 	public boolean delete() throws SQLException {
 		
 			var con = DBConexao.criarConexao();
@@ -116,7 +124,8 @@ public class ServicoAdicional {
 			
 			return true;
 	}
-
+	
+	// Busca um serviço adicional pelo ID
 	public static ServicoAdicional findById(Long id) {
 		ServicoAdicional sc = null;
 
@@ -126,7 +135,7 @@ public class ServicoAdicional {
 	        var rs = s.executeQuery("SELECT * FROM servicos_adicionais WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	            sc = map(rs);
+	            sc = map(rs);  // mapeia o resultado para um objeto Java
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -136,7 +145,7 @@ public class ServicoAdicional {
 
 	    return sc;
 	}
-
+	// Mapeia um ResultSet para um objeto ServicoAdicional
 	private static ServicoAdicional map(ResultSet rs) throws SQLException {
 		ServicoAdicional sc;
 		sc = new ServicoAdicional();
@@ -146,7 +155,8 @@ public class ServicoAdicional {
 		sc.preco = rs.getBigDecimal("preco");
 		return sc;
 	}
-
+	
+	// Retorna todos os serviços adicionais cadastrados
 	public static List<ServicoAdicional> findAll() {
 		List<ServicoAdicional> list = new ArrayList<ServicoAdicional>();
 

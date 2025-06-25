@@ -20,6 +20,7 @@ import com.enzoapps.viajatour.db.TipoPacote;
 import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 
+//Classe para a janela de edição de Pacote de Viagem
 public class EditarPacoteViagem extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -37,9 +38,11 @@ public class EditarPacoteViagem extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	// Construtor da tela de edição de Pacote de Viagem
 	public EditarPacoteViagem(ListarPacoteViagem pai) {
 		this.pai = pai;
 		
+		// Configurações da janela
 		setTitle("Editar Pacote de Viagem");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
@@ -47,6 +50,7 @@ public class EditarPacoteViagem extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
+		// Rótulos dos campos
 		{
 			JLabel lblNome = new JLabel("Nome:");
 			lblNome.setBounds(10, 42, 80, 13);
@@ -77,6 +81,7 @@ public class EditarPacoteViagem extends JDialog {
 			lblTipoPacote.setBounds(10, 157, 92, 13);
 			contentPanel.add(lblTipoPacote);
 		}
+		// Campos de entrada
 		{
 			textNome = new JTextField();
 			textNome.setBounds(111, 39, 296, 19);
@@ -108,6 +113,7 @@ public class EditarPacoteViagem extends JDialog {
 			textPrecoBase.setColumns(10);
 		}
 		
+		// ComboBox de Tipo de Pacote
 		cbxTipoPacote = new JComboBox<TipoPacote>();
 		carregarTipoPacote();
 		cbxTipoPacote.setBounds(112, 153, 295, 21);
@@ -118,10 +124,12 @@ public class EditarPacoteViagem extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
+				// Painel inferior com botão OK
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						// Validacao se estiverem em branco
 						if (textNome.getText().isEmpty() || textNome.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O campo nome esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -137,6 +145,7 @@ public class EditarPacoteViagem extends JDialog {
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
+						// Validação da duração (inteiro)
 						if (textDuracaoDias.getText().isEmpty() || textDuracaoDias.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O campo duracao do pacote esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -148,7 +157,7 @@ public class EditarPacoteViagem extends JDialog {
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
-						
+						// Validação do preço base
 						if (textPrecoBase.getText().isEmpty() || textPrecoBase.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O campo preco esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -162,6 +171,7 @@ public class EditarPacoteViagem extends JDialog {
 							return;
 						}
 						
+						// Preencher o objeto PacoteViagem com os dados informados
 						pv.setNome(textNome.getText());
 						pv.setDescricao(textDescricao.getText());
 						pv.setDestino(textDestino.getText());
@@ -184,11 +194,13 @@ public class EditarPacoteViagem extends JDialog {
 		}
 		
 	}
+	// Fecha a janela e recarrega os dados da lista
 	@Override
 	public void dispose() {
 		super.dispose();
 		pai.carregarDados();
 	}
+	// Preenche os campos com os dados do pacote selecionado
 	public void setPacoteViagem(PacoteViagem pv) {
 		this.pv = pv;
 		textNome.setText(pv.getNome());
@@ -198,6 +210,7 @@ public class EditarPacoteViagem extends JDialog {
 		textPrecoBase.setText(pv.getPrecoBase().toString());
 		cbxTipoPacote.setSelectedItem(TipoPacote.findById(pv.getTipoPacoteId()));
 	}
+	// Carrega os tipos de pacote no ComboBox
 	public void carregarTipoPacote() {
 		var tipos = TipoPacote.findAll();
 		DefaultComboBoxModel<TipoPacote> model = new DefaultComboBoxModel<>();

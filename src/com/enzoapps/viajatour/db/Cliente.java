@@ -10,15 +10,17 @@ import org.h2.tools.Server;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
+//Classe que representa um cliente no sistema
 public class Cliente {
 	private Long id;
 	private String nome;
 	private String telefone;
 	private String email;
-	private TipoCliente tipo;
+	private TipoCliente tipo; // Enum: NACIONAL ou ESTRANGEIRO
 	private String cpf;
 	private String passaporte;
-
+	
+	// Construtor com parâmetros
 	public Cliente(String nome, String telefone, String email, TipoCliente tipo, String cpf,
 			String passaporte) {
 
@@ -30,10 +32,12 @@ public class Cliente {
 		this.passaporte = passaporte;
 	}
 
+	// Construtor vazio (necessário para alguns usos, como JDBC e frameworks)
 	public Cliente() {
 	
 	}
-
+	
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -89,12 +93,14 @@ public class Cliente {
 	public void setPassaporte(String passaporte) {
 		this.passaporte = passaporte;
 	}
-
+	
+	// Exibe o nome quando a classe for usada como texto
 	@Override
 	public String toString() {
 		return nome;
 	}
-
+	
+	// Compara objetos de Cliente com base no ID
 	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj) return true;
@@ -102,13 +108,13 @@ public class Cliente {
 	    Cliente that = (Cliente) obj;
 	    return Objects.equals(id, that.id); 
 	}
-
+	
 	@Override
 	public int hashCode() {
 	    return Objects.hash(id);
 	}
 	
-	
+	// Insere um novo cliente no banco de dados
 	public boolean insert() {
 
 		try {
@@ -130,6 +136,7 @@ public class Cliente {
 		
 	}
 	
+	// Atualiza os dados de um cliente existente
 	public boolean update() {
 
 		try {
@@ -153,7 +160,8 @@ public class Cliente {
 		}
 		
 	}
-
+	
+	// Exclui um cliente do banco de dados pelo ID
 	public boolean delete() throws SQLException  {
 		
 			var con = DBConexao.criarConexao();
@@ -164,7 +172,8 @@ public class Cliente {
 			
 			return true;
 	}
-
+	
+	// Busca um cliente pelo ID
 	public static Cliente findById(Long id) {
 	    Cliente c = null;
 
@@ -174,7 +183,7 @@ public class Cliente {
 	        var rs = s.executeQuery("SELECT * FROM clientes WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	            c = map(rs);
+	            c = map(rs); // mapeia os dados do banco para um objeto Cliente
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -184,7 +193,8 @@ public class Cliente {
 
 	    return c;
 	}
-
+	
+	// Método auxiliar para converter ResultSet em objeto Cliente
 	private static Cliente map(ResultSet rs) throws SQLException {
 		Cliente c;
 		c = new Cliente();
@@ -192,6 +202,8 @@ public class Cliente {
 		c.nome = rs.getString("NOME");
 		c.telefone = rs.getString("TELEFONE");
 		c.email = rs.getString("EMAIL");
+		
+		// Trata o tipo de cliente como enum
 		String tipoBanco = rs.getString("TIPO_CLIENTE").toUpperCase().trim();
 	    if ("NACIONAL".equals(tipoBanco)) {
 	        c.tipo = TipoCliente.NACIONAL;
@@ -205,7 +217,7 @@ public class Cliente {
 		return c;
 	}
 
-
+	// Retorna todos os clientes cadastrados no banco
 	public static List<Cliente> findAll() {
 		List<Cliente> list = new ArrayList<Cliente>();
 
@@ -215,7 +227,7 @@ public class Cliente {
 	        var rs = s.executeQuery("SELECT * FROM clientes;");
             
 	        while (rs.next()) {
-	        	list.add(map(rs));
+	        	list.add(map(rs)); // adiciona cada cliente à lista
 	        }
 
 	        DBConexao.fecharConexao(con);

@@ -21,6 +21,7 @@ import com.enzoapps.viajatour.tela.tipopacote.ListarTipoPacote;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+//Classe para a janela de edição de cliente
 public class EditarCliente extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -31,12 +32,13 @@ public class EditarCliente extends JDialog {
 	private JTextField txtCPF;
 	private JTextField txtPassaporte;
 	private JComboBox<TipoCliente> cbxTipoCliente;
-	private ListarCliente pai;
-	public Cliente c = new Cliente();
+	private ListarCliente pai; // Tela pai
+	public Cliente c = new Cliente(); // Cliente sendo editado
 
 	/**
 	 * Create the dialog.
 	 */
+	// Construtor do formulário de edição
 	public EditarCliente(ListarCliente pai) {
 		this.pai = pai;
 
@@ -52,7 +54,8 @@ public class EditarCliente extends JDialog {
 		txtNome.setBounds(109, 24, 277, 19);
 		contentPanel.add(txtNome);
 		txtNome.setColumns(10);
-
+		
+		// Rótulos
 		JLabel lblTelefone = new JLabel("Telefone:");
 		lblTelefone.setBounds(10, 53, 73, 13);
 		contentPanel.add(lblTelefone);
@@ -72,45 +75,54 @@ public class EditarCliente extends JDialog {
 		JLabel lblPassaporte = new JLabel("Passaporte:");
 		lblPassaporte.setBounds(10, 149, 73, 13);
 		contentPanel.add(lblPassaporte);
-
+		
+		// Campo Telefone
 		txtTelefone = new JTextField();
 		txtTelefone.setBounds(109, 50, 277, 19);
 		contentPanel.add(txtTelefone);
 		txtTelefone.setColumns(10);
-
+		
+		// Campo Email
 		txtEmail = new JTextField();
 		txtEmail.setBounds(109, 73, 277, 19);
 		contentPanel.add(txtEmail);
 		txtEmail.setColumns(10);
-
+		
+		// Campo CPF
 		txtCPF = new JTextField();
 		txtCPF.setBounds(109, 123, 277, 19);
 		contentPanel.add(txtCPF);
 		txtCPF.setColumns(10);
-		txtCPF.setDisabledTextColor(Color.DARK_GRAY);
 		txtCPF.setEnabled(true);
-
+		
+		// Campo Passaporte
 		txtPassaporte = new JTextField();
 		txtPassaporte.setBounds(109, 146, 277, 19);
 		contentPanel.add(txtPassaporte);
 		txtPassaporte.setColumns(10);
-		txtPassaporte.setDisabledTextColor(Color.DARK_GRAY);
+		txtPassaporte.setBackground(Color.LIGHT_GRAY);
 		txtPassaporte.setEnabled(false);
-
+		
+		// ComboBox Tipo do Cliente
 		cbxTipoCliente = new JComboBox<>(TipoCliente.values());
 		cbxTipoCliente.setBounds(109, 95, 277, 21);
 		contentPanel.add(cbxTipoCliente);
 		cbxTipoCliente.addActionListener(new ActionListener() {
 			
+			// Alternar campos CPF/Passaporte conforme tipo de cliente
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (cbxTipoCliente.getSelectedItem().equals(TipoCliente.NACIONAL)) {
 					
 					txtPassaporte.setEnabled(false);
+					txtPassaporte.setBackground(Color.LIGHT_GRAY);
 					txtCPF.setEnabled(true);
+					txtCPF.setBackground(Color.WHITE);
 				} else {
 					txtPassaporte.setEnabled(true);
+					txtPassaporte.setBackground(Color.WHITE);
 					txtCPF.setEnabled(false);
+					txtCPF.setBackground(Color.LIGHT_GRAY);
 				}
 			}
 		});
@@ -128,6 +140,7 @@ public class EditarCliente extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						// Validações se estiverem em branco
 						if (txtNome.getText().isEmpty() || txtNome.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O nome esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -160,7 +173,7 @@ public class EditarCliente extends JDialog {
 						}
 						
 						
-						/* Validação*/
+						// Validacao
 						
 						if (cbxTipoCliente.getSelectedItem().equals(TipoCliente.NACIONAL)) {
 							if (!validarCPF(txtCPF.getText())) {
@@ -175,6 +188,7 @@ public class EditarCliente extends JDialog {
 							return;
 						}
 						
+						// Preenche dados no objeto Cliente
 						c.setNome(txtNome.getText());
 						c.setTelefone(txtTelefone.getText());
 						c.setEmail(txtEmail.getText());
@@ -203,7 +217,8 @@ public class EditarCliente extends JDialog {
 		super.dispose();
 		pai.carregarDados();
 	}
-
+	
+	// Preenche os campos com os dados do cliente
 	public void setCliente(Cliente c) {
 		this.c = c;
 		txtNome.setText(c.getNome());
@@ -214,13 +229,11 @@ public class EditarCliente extends JDialog {
 		cbxTipoCliente.setSelectedItem(c.getTipo());
 	}
 
-	/**
-	 * Método para validar CPF brasileiro Verifica se o CPF possui 11 dígitos e se
+	/* Método para validar CPF brasileiro Verifica se o CPF possui 11 dígitos e se
 	 * os dígitos verificadores estão corretos
-	 * 
 	 * @param cpf String contendo o CPF a ser validado (pode conter pontos e hífen)
-	 * @return true se o CPF for válido, false caso contrário
-	 */
+	 * @return true se o CPF for válido, false caso contrário */
+	
 	private boolean validarCPF(String cpf) {
 		// Remove caracteres não numéricos (pontos e hífen)
 		cpf = cpf.replaceAll("[^0-9]", "");
@@ -264,12 +277,11 @@ public class EditarCliente extends JDialog {
 		return Character.getNumericValue(cpf.charAt(10)) == segundoDigito;
 	}
 	
-	/*
-	 * Método para validar endereço de email
+	/* Método para validar endereço de email
 	 * Verifica se o email possui formato válido usando regex
 	 * @param email String contendo o email a ser validado
-	 * @return true se o email for válido, false caso contrário
-	 */
+	 * @return true se o email for válido, false caso contrário */
+	
 	private boolean validarEmail(String email) {
 	    // Verifica se o email não é nulo ou vazio
 	    if (email == null || email.trim().isEmpty()) {

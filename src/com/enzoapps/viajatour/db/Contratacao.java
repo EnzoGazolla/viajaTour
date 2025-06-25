@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
+//Classe que representa uma contratação (venda de pacote) no sistema
 public class Contratacao {
 	
 	private Long id;
@@ -17,17 +18,20 @@ public class Contratacao {
 	private LocalDate dataContratacao;
 	private BigDecimal valorTotal;
 	
+	// Construtor com parâmetros
 	public Contratacao(Long clienteId, Long pacoteViagemId, LocalDate dataContratacao, BigDecimal valorTotal) {
 		this.clienteId = clienteId;
 		this.pacoteViagemId = pacoteViagemId;
 		this.dataContratacao = dataContratacao;
 		this.valorTotal = valorTotal;
 	}
-
+	
+	// Construtor vazio (necessário para mapeamento e frameworks)
 	public Contratacao() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	// Getters e Setters
 	public Long getId() {
 		return id;
 	}
@@ -67,13 +71,15 @@ public class Contratacao {
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
-
+	
+	// Representação textual do objeto (útil para debug e exibição)
 	@Override
 	public String toString() {
 		return "Contratacao [id=" + id + ", clienteId=" + clienteId + ", pacoteViagemId=" + pacoteViagemId
 				+ ", dataContratacao=" + dataContratacao + ", valorTotal=" + valorTotal + "]";
 	}
 	
+	// Insere uma nova contratação no banco de dados
 	public boolean insert() {
 
 		try {
@@ -96,6 +102,7 @@ public class Contratacao {
 		}
 	}
 	
+	// Atualiza os dados de uma contratação existente
 	public boolean update() {
 
 		try {
@@ -120,7 +127,8 @@ public class Contratacao {
 		}
 		
 	}
-
+	
+	// Deleta uma contratação com base no ID
 	public boolean delete() throws SQLException {
 
 			var con = DBConexao.criarConexao();
@@ -131,7 +139,7 @@ public class Contratacao {
 			
 			return true;
 	}
-
+	// Busca uma contratação pelo ID
 	public static Contratacao findById(Long id) {
 		Contratacao c = null;
 
@@ -141,7 +149,7 @@ public class Contratacao {
 	        var rs = s.executeQuery("SELECT * FROM contratacoes WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	            c = map(rs);
+	            c = map(rs); // Mapeia resultado do banco para objeto Contratacao
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -151,7 +159,8 @@ public class Contratacao {
 
 	    return c;
 	}
-
+	
+	// Converte o resultado do banco (ResultSet) em um objeto Contratacao
 	private static Contratacao map(ResultSet rs) throws SQLException {
 		Contratacao c;
 		c = new Contratacao();
@@ -162,7 +171,8 @@ public class Contratacao {
 		c.valorTotal = rs.getBigDecimal("valor_total");
 		return c;
 	}
-
+	
+	// Retorna todas as contratações cadastradas
 	public static List<Contratacao> findAll() {
 		List<Contratacao> list = new ArrayList<Contratacao>();
 
@@ -172,7 +182,7 @@ public class Contratacao {
 	        var rs = s.executeQuery("SELECT * FROM contratacoes;");
             
 	        while (rs.next()) {
-	        	list.add(map(rs));
+	        	list.add(map(rs)); // Adiciona cada contratação à lista
 	        }
 
 	        DBConexao.fecharConexao(con);

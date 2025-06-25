@@ -23,6 +23,7 @@ import com.enzoapps.viajatour.db.Cliente;
 import com.enzoapps.viajatour.db.Contratacao;
 import com.enzoapps.viajatour.db.PacoteViagem;
 
+//Classe para a janela de edição de vendas
 public class EditarVenda extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -31,14 +32,15 @@ public class EditarVenda extends JDialog {
 	private JTextField txtPreco;
 	private JComboBox<Cliente> cbxCliente;
 	private JComboBox<PacoteViagem> cbxPacote;
-	private ListarVenda pai;
-	public Contratacao venda = new Contratacao();
+	private ListarVenda pai; // Referência para a tela pai (lista)
+	public Contratacao venda = new Contratacao(); // Objeto da venda a ser editado
 	
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	/**
 	 * Create the dialog.
 	 */
+	// Construtor do formulário de edição de venda
 	public EditarVenda(ListarVenda pai) {
 		this.pai = pai;
 		
@@ -50,6 +52,7 @@ public class EditarVenda extends JDialog {
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
 		
+		// Rótulos
 		JLabel lblCliente = new JLabel("Cliente:");
 		lblCliente.setBounds(20, 46, 68, 13);
 		contentPanel.add(lblCliente);
@@ -66,21 +69,25 @@ public class EditarVenda extends JDialog {
 		lblValorTotal.setBounds(20, 159, 87, 13);
 		contentPanel.add(lblValorTotal);
 		
+		// Campo de Data
 		txtData = new JTextField();
 		txtData.setBounds(126, 112, 258, 19);
 		contentPanel.add(txtData);
 		txtData.setColumns(10);
 		
+		// Campo de Preco
 		txtPreco = new JTextField();
 		txtPreco.setBounds(126, 156, 258, 19);
 		contentPanel.add(txtPreco);
 		txtPreco.setColumns(10);
 		
+		// ComboBox de Pacotes
 		cbxPacote = new JComboBox<PacoteViagem>();
 		carregarPacote();
 		cbxPacote.setBounds(126, 78, 258, 21);
 		contentPanel.add(cbxPacote);
 		
+		// ComboBox de Clientes
 		cbxCliente = new JComboBox<Cliente>();
 		carregarCliente();
 		cbxCliente.setBounds(126, 42, 258, 21);
@@ -95,23 +102,26 @@ public class EditarVenda extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						// Validação se estiverem em Branco
 						if (txtData.getText().isEmpty() || txtData.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O campo de data esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
-						
+						// Validacao
 						if (!validarData(txtData.getText())) {
 							JOptionPane.showMessageDialog(pai, "A Data esta invalida", "Error",
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
 						
+						// Validação se estiverem em Branco
 						if (txtPreco.getText().isEmpty() || txtPreco.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O valor esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
 							return;
 						}
+						// Validacao
 						var valor = validaValor(txtPreco.getText());
 						if (valor.compareTo(BigDecimal.ZERO) == 0) {
 							JOptionPane.showMessageDialog(pai, "O valor esta incorreto", "Error",
@@ -119,6 +129,7 @@ public class EditarVenda extends JDialog {
 							return;
 						}
 						
+						// Preencher o objeto com os dados do formulário
 						venda.setClienteId(((Cliente)(cbxCliente.getSelectedItem())).getId());
 						venda.setPacoteViagemId(((PacoteViagem)(cbxPacote.getSelectedItem())).getId());
 						venda.setDataContratacao(LocalDate.parse(txtData.getText(), formatter));
@@ -138,11 +149,14 @@ public class EditarVenda extends JDialog {
 			}
 		}
 	}
+	// Fecha a janela e recarrega os dados da lista
 	@Override
 	public void dispose() {
 		super.dispose();
 		pai.carregarDados();
 	}
+	
+	// Preenche os campos com os dados da venda selecionada
 	public void setContratacao(Contratacao venda) {
 		this.venda = venda;
 		cbxCliente.setSelectedItem(Cliente.findById(venda.getClienteId()));
@@ -151,6 +165,7 @@ public class EditarVenda extends JDialog {
 		txtPreco.setText(venda.getValorTotal().toString());
 		
 	}
+	// Carrega todos os clientes para o ComboBox
 	public void carregarCliente() {
 		var clientes = Cliente.findAll();
 		DefaultComboBoxModel<Cliente> model = new DefaultComboBoxModel<>();
@@ -159,6 +174,8 @@ public class EditarVenda extends JDialog {
 		}
 		cbxCliente.setModel(model);
 	}
+	
+	// Carrega todos os pacotes para o ComboBox
 	public void carregarPacote() {
 		var pacotes = PacoteViagem.findAll();
 		DefaultComboBoxModel<PacoteViagem> model = new DefaultComboBoxModel<>();
@@ -167,6 +184,8 @@ public class EditarVenda extends JDialog {
 		}
 		cbxPacote.setModel(model);
 	}
+	
+	// Valida o valor informado (retorna 0 se inválido)
 	public  boolean validarData(String dataStr) {
 		DateTimeFormatter formatter = DateTimeFormatter
                 .ofPattern("dd/MM/uuuu")

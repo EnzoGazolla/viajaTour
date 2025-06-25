@@ -33,9 +33,11 @@ public class EditarTipoPacote extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	// Construtor do diálogo
 	public EditarTipoPacote(ListarTipoPacote pai) {
 		this.pai = pai;
 		
+		// Configura painel de conteúdo
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(null);
 		contentPanel.setBounds(0, 0, 436, 232);
@@ -43,14 +45,17 @@ public class EditarTipoPacote extends JDialog {
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
 		
+		// Rótulo e campo de texto para o nome
 		JLabel lblNome = new JLabel("Nome:");
 		lblNome.setBounds(10, 29, 45, 13);
 		contentPanel.add(lblNome);
 		
+		// Rótulo e campo de texto para a descrição
 		JLabel lblDescricao = new JLabel("Descrição:");
 		lblDescricao.setBounds(10, 81, 45, 13);
 		contentPanel.add(lblDescricao);
 		
+		// Painel dos botões
 		txtNome = new JTextField();
 		txtNome.setBounds(65, 26, 350, 19);
 		contentPanel.add(txtNome);
@@ -70,6 +75,8 @@ public class EditarTipoPacote extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+
+						// Validação dos campos
 						if (txtNome.getText().isEmpty() || txtNome.getText().isBlank()) {
 							JOptionPane.showMessageDialog(pai, "O nome esta em branco", "Error",
 									JOptionPane.ERROR_MESSAGE);
@@ -89,6 +96,7 @@ public class EditarTipoPacote extends JDialog {
 						} else {
 							tp.update();
 						}
+						// Mensagem de sucesso e fecha o diálogo
 						JOptionPane.showMessageDialog(pai, "Registro feito com sucesso","Sucesso", JOptionPane.INFORMATION_MESSAGE);
 						EditarTipoPacote.this.dispose();
 					}
@@ -99,11 +107,14 @@ public class EditarTipoPacote extends JDialog {
 			}
 		}
 	}
+	
+	// Fecha a janela e recarrega os dados na tela principal
 	@Override
 	public void dispose() {
 		super.dispose();
 		pai.carregarDados();
 	}
+	// Método para preencher os campos com dados de um TipoPacote existente
 	public void setTipoPacote(TipoPacote tp) {
 		this.tp = tp;
 		txtNome.setText(tp.getNome());

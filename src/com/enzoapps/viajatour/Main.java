@@ -19,18 +19,23 @@ import com.enzoapps.viajatour.util.DBBanco;
 import com.enzoapps.viajatour.util.DBCarga;
 import com.enzoapps.viajatour.util.DBConexao;
 
+/* Classe principal da aplicação ViajaTour.
+  Responsável por iniciar o sistema:
+  - Criar as tabelas do banco de dados (caso não existam)
+  - Carregar dados iniciais de exemplo
+  - Abrir a interface gráfica principal (menu)*/
 public class Main {
 
 	public static void main(String[] args) {
 		
+		// Cria as tabelas do banco de dados (estrutura)
 		new DBBanco().criarTabela();
+		
+		// Insere dados de exemplo no banco (carga inicial)
 		new DBCarga().carregar();
 		
+		// Abre a interface gráfica principal da aplicação
 		new Menu().setVisible(true);
 		
-		
-		
-		
-
 	}
 }

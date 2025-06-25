@@ -7,22 +7,25 @@ import java.util.List;
 
 import com.enzoapps.viajatour.util.DBConexao;
 
+// Classe Servico Contratado
 public class ServicoContratado {
 	
 	private Long id;
 	private Long contratacaoId;
 	private Long ServicoId;
 	
+	// Construtor com parâmetros
 	public ServicoContratado(Long contrtacaoId, Long servicoId) {
 		this.contratacaoId = contrtacaoId;
 		this.ServicoId = servicoId;
 	}
 
-	
+	// Construtor vazio (necessário para métodos como map())
 	public Long getId() {
 		return id;
 	}
 
+	// Getters e Setters
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -45,7 +48,8 @@ public class ServicoContratado {
 	public void setServicoId(Long servicoId) {
 		ServicoId = servicoId;
 	}
-
+	
+	// Representação do objeto como string
 	@Override
 	public String toString() {
 		
@@ -59,6 +63,7 @@ public class ServicoContratado {
 		
 	}
 	
+	// Insere um novo registro no banco
 	public boolean insert() {
 
 		try {
@@ -80,6 +85,7 @@ public class ServicoContratado {
 		}
 	}
 	
+	// Atualiza um registro existente
 	public boolean update() {
 
 		try {
@@ -101,7 +107,8 @@ public class ServicoContratado {
 		}
 		
 	}
-
+	
+	// Deleta um registro do banco
 	public boolean delete() {
 		
 		try {
@@ -119,7 +126,8 @@ public class ServicoContratado {
 			return false;
 		}
 	}
-
+	
+	// Busca um registro pelo ID
 	public static ServicoContratado findById(Long id) {
 		ServicoContratado sc = null;
 
@@ -129,7 +137,7 @@ public class ServicoContratado {
 	        var rs = s.executeQuery("SELECT * FROM contratacao_servicos WHERE ID = " + id + ";");
 
 	        if (rs.next()) {
-	            sc = map(rs);
+	            sc = map(rs); // converte ResultSet em objeto ServicoContratado
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -139,7 +147,8 @@ public class ServicoContratado {
 
 	    return sc;
 	}
-
+	
+	// Converte um ResultSet em um objeto ServicoContratado
 	private static ServicoContratado map(ResultSet rs) throws SQLException {
 		ServicoContratado sc;
 		sc = new ServicoContratado();
@@ -148,7 +157,8 @@ public class ServicoContratado {
 		sc.ServicoId = rs.getLong("servico_id");
 		return sc;
 	}
-
+	
+	// Retorna todos os registros da tabela contratacao_servicos
 	public static List<ServicoContratado> findAll() {
 		List<ServicoContratado> list = new ArrayList<ServicoContratado>();
 
@@ -158,7 +168,7 @@ public class ServicoContratado {
 	        var rs = s.executeQuery("SELECT * FROM contratacao_servicos;");
             
 	        while (rs.next()) {
-	        	list.add(map(rs));
+	        	list.add(map(rs)); // adiciona cada registro mapeado na lista
 	        }
 
 	        DBConexao.fecharConexao(con);
@@ -168,6 +178,5 @@ public class ServicoContratado {
 
 	    return list;
 	}
-	
 	
 }
