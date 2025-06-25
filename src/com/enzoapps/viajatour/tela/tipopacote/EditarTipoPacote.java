@@ -70,6 +70,18 @@ public class EditarTipoPacote extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						if (txtNome.getText().isEmpty() || txtNome.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O nome esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						if (txtDescricao.getText().isEmpty() || txtDescricao.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "A descrição esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
 						tp.setNome(txtNome.getText());
 						tp.setDescricao(txtDescricao.getText());
 						if (tp.getId() == null) {

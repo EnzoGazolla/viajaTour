@@ -88,9 +88,27 @@ public class EditarServicoAdicional extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						if (textNome.getText().isEmpty() || textNome.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O Nome esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						if (textDescricao.getText().isEmpty() || textDescricao.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "A Descricao esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						var valor = validaValor(textPreco.getText());
+						if (valor.compareTo(BigDecimal.ZERO) == 0) {
+							JOptionPane.showMessageDialog(pai, "O valor do preco esta incorreto", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 						sa.setNome(textNome.getText());
 						sa.setDescricao(textDescricao.getText());
-						sa.setPreco(new BigDecimal(textPreco.getText()));
+						sa.setPreco(valor);
 						if (sa.getId() == null) {
 							sa.insert();
 						} else {
@@ -118,5 +136,52 @@ public class EditarServicoAdicional extends JDialog {
 		textDescricao.setText(sa.getDescricao());
 		textPreco.setText(sa.getPreco().toString());
 	}
-
+	
+	/**
+	 * Método para validar se uma String pode ser convertida para BigDecimal
+	 * Verifica se a string possui formato numérico válido
+	 * Aceita formatos com vírgula ou ponto como separador decimal
+	 * @param valor String contendo o valor a ser validado
+	 * @return true se a string for um número válido, false caso contrário
+	 */
+	private BigDecimal validaValor(String valor) {
+	    // Verifica se o valor não é nulo ou vazio
+	    if (valor == null || valor.trim().isEmpty()) {
+	        return new java.math.BigDecimal(0);
+	    }
+	    
+	    // Remove espaços em branco
+	    valor = valor.trim();
+	    
+	    // Substitui vírgula por ponto (padrão brasileiro para internacional)
+	    valor = valor.replace(",", ".");
+	    
+	    // Remove pontos que não sejam o separador decimal
+	    // Exemplo: "1.234.567,89" vira "1234567.89"
+	    if (valor.contains(".")) {
+	        int ultimoPonto = valor.lastIndexOf(".");
+	        // Se há mais de um ponto, remove os pontos que não são o último (separadores de milhares)
+	        if (valor.indexOf(".") != ultimoPonto) {
+	            String parteInteira = valor.substring(0, ultimoPonto).replace(".", "");
+	            String parteDecimal = valor.substring(ultimoPonto);
+	            valor = parteInteira + parteDecimal;
+	        }
+	    }
+	    
+	    try {
+	        // Tenta converter para BigDecimal para verificar se é válido
+	        java.math.BigDecimal resultado = new java.math.BigDecimal(valor);
+	        
+	        // Verifica se o valor é negativo (opcional - remova se valores negativos forem permitidos)
+	        if (resultado.compareTo(java.math.BigDecimal.ZERO) < 0) {
+	            return new java.math.BigDecimal(0);
+	        }
+	        
+	        return resultado;
+	        
+	    } catch (NumberFormatException e) {
+	        // Se não conseguir converter, retorna false
+	        return new java.math.BigDecimal(0);
+	    }
+	}
 }

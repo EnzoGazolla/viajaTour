@@ -122,11 +122,51 @@ public class EditarPacoteViagem extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
+						if (textNome.getText().isEmpty() || textNome.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O campo nome esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						if (textDescricao.getText().isEmpty() || textDescricao.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O campo decricao esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						if (textDestino.getText().isEmpty() || textDestino.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O campo destino esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						if (textDuracaoDias.getText().isEmpty() || textDuracaoDias.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O campo duracao do pacote esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						if (!validarInteiro(textDuracaoDias.getText())) {
+							JOptionPane.showMessageDialog(pai, "O campo duracao do pacote esta invalido", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						if (textPrecoBase.getText().isEmpty() || textPrecoBase.getText().isBlank()) {
+							JOptionPane.showMessageDialog(pai, "O campo preco esta em branco", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
+						var valor = validaValor(textPrecoBase.getText());
+						if (valor.compareTo(BigDecimal.ZERO) == 0) {
+							JOptionPane.showMessageDialog(pai, "O valor esta incorreto", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						
 						pv.setNome(textNome.getText());
 						pv.setDescricao(textDescricao.getText());
-						pv.setDestino(textDescricao.getText());
+						pv.setDestino(textDestino.getText());
 						pv.setDuracaoDias(Integer.parseInt(textDuracaoDias.getText()));
-						pv.setPrecoBase(new BigDecimal(textPrecoBase.getText()));
+						pv.setPrecoBase(valor);
 						pv.setTipoPacoteId(((TipoPacote)(cbxTipoPacote.getSelectedItem())).getId());
 						if (pv.getId() == null) {
 							pv.insert();
@@ -165,5 +205,71 @@ public class EditarPacoteViagem extends JDialog {
 			model.addElement(tipoPacote);
 		}
 		cbxTipoPacote.setModel(model);
+	}
+	/**
+	 * Método para validar se uma String pode ser convertida para BigDecimal
+	 * Verifica se a string possui formato numérico válido
+	 * Aceita formatos com vírgula ou ponto como separador decimal
+	 * @param valor String contendo o valor a ser validado
+	 * @return true se a string for um número válido, false caso contrário
+	 */
+	private BigDecimal validaValor(String valor) {
+	    // Verifica se o valor não é nulo ou vazio
+	    if (valor == null || valor.trim().isEmpty()) {
+	        return new java.math.BigDecimal(0);
+	    }
+	    
+	    // Remove espaços em branco
+	    valor = valor.trim();
+	    
+	    // Substitui vírgula por ponto (padrão brasileiro para internacional)
+	    valor = valor.replace(",", ".");
+	    
+	    // Remove pontos que não sejam o separador decimal
+	    // Exemplo: "1.234.567,89" vira "1234567.89"
+	    if (valor.contains(".")) {
+	        int ultimoPonto = valor.lastIndexOf(".");
+	        // Se há mais de um ponto, remove os pontos que não são o último (separadores de milhares)
+	        if (valor.indexOf(".") != ultimoPonto) {
+	            String parteInteira = valor.substring(0, ultimoPonto).replace(".", "");
+	            String parteDecimal = valor.substring(ultimoPonto);
+	            valor = parteInteira + parteDecimal;
+	        }
+	    }
+	    
+	    try {
+	        // Tenta converter para BigDecimal para verificar se é válido
+	        java.math.BigDecimal resultado = new java.math.BigDecimal(valor);
+	        
+	        // Verifica se o valor é negativo (opcional - remova se valores negativos forem permitidos)
+	        if (resultado.compareTo(java.math.BigDecimal.ZERO) < 0) {
+	            return new java.math.BigDecimal(0);
+	        }
+	        
+	        return resultado;
+	        
+	    } catch (NumberFormatException e) {
+	        // Se não conseguir converter, retorna false
+	        return new java.math.BigDecimal(0);
+	    }
+	}
+	/*
+	 * Método para validar endereço de email
+	 * Verifica se o email possui formato válido usando regex
+	 * @param email String contendo o email a ser validado
+	 * @return true se o email for válido, false caso contrário
+	 */
+	private boolean validarInteiro(String numero) {
+	   
+		try {
+			Integer.parseInt(numero);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	  
+	  
+	    
+	    
 	}
 }

@@ -16,8 +16,8 @@ public class DBBanco {
 					+ "telefone VARCHAR(20)," 
 					+ "email VARCHAR(100) UNIQUE,"
 					+ "tipo_cliente VARCHAR(20) NOT NULL," // 'NACIONAL' ou 'ESTRANGEIRO'
-					+ "cpf VARCHAR(14) UNIQUE NULL,"
-					+ "passaporte VARCHAR(50) UNIQUE NULL" + ");");
+					+ "cpf VARCHAR(14) ,"
+					+ "passaporte VARCHAR(50)" + ");");
 
 			s.execute("CREATE TABLE IF NOT EXISTS tipos_pacote ("
 	                + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
