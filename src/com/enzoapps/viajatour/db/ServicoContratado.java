@@ -148,6 +148,60 @@ public class ServicoContratado {
 	    return sc;
 	}
 	
+	public static List<ServicoContratado> findByPacoteViagem(Long pacoteViagemId) {
+	    List<ServicoContratado> servicosVinculados = new ArrayList<ServicoContratado>();
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        
+	        // Query que busca serviços contratados através da tabela de contratações
+	        // vinculadas ao pacote de viagem especificado
+	        var rs = s.executeQuery(
+	            "SELECT cs.* FROM contratacao_servicos cs " +
+	            "INNER JOIN contratacoes c ON cs.contratacao_id = c.id " +
+	            "WHERE c.id_pacote_viagem = " + pacoteViagemId + ";"
+	        );
+	        
+	        while (rs.next()) {
+	            servicosVinculados.add(map(rs)); // adiciona cada serviço contratado na lista
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return servicosVinculados;
+	}
+
+	public static List<Long> findServicoIdsByPacoteViagem(Long pacoteViagemId) {
+	    List<Long> servicoIds = new ArrayList<Long>();
+
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var s = con.createStatement();
+	        
+	        // Query que busca IDs únicos dos serviços vinculados ao pacote
+	        var rs = s.executeQuery(
+	            "SELECT DISTINCT cs.servico_id FROM contratacao_servicos cs " +
+	            "INNER JOIN contratacao c ON cs.contratacao_id = c.id " +
+	            "WHERE c.pacote_viagem_id = " + pacoteViagemId + ";"
+	        );
+	        
+	        while (rs.next()) {
+	            servicoIds.add(rs.getLong("servico_id"));
+	        }
+
+	        DBConexao.fecharConexao(con);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return servicoIds;
+	}
+	
+	
 	// Converte um ResultSet em um objeto ServicoContratado
 	private static ServicoContratado map(ResultSet rs) throws SQLException {
 		ServicoContratado sc;

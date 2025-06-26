@@ -72,7 +72,8 @@ public class ListarVenda extends JDialog {
 				JButton btnNovo = new JButton("Novo");
 				btnNovo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						new EditarVenda(ListarVenda.this).setVisible(true);
+						//new EditarVenda(ListarVenda.this).setVisible(true);
+						new EditarVendaComAbas(ListarVenda.this).setVisible(true);
 					}
 				});
 				buttonPane.add(btnNovo);
@@ -89,7 +90,8 @@ public class ListarVenda extends JDialog {
 						}
 						
 						var selecionado = vendas.get(linhaSelecionada);
-						var editar = new EditarVenda(ListarVenda.this);
+						//var editar = new EditarVenda(ListarVenda.this);
+						var editar = new EditarVendaComAbas(ListarVenda.this);
 						editar.setContratacao(selecionado);
 						editar.setVisible(true);
 					}
