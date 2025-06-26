@@ -3,6 +3,7 @@ package com.enzoapps.viajatour.db;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,26 +81,42 @@ public class Contratacao {
 	}
 	
 	// Insere uma nova contratação no banco de dados
-	public boolean insert() {
-
-		try {
-
-			var con = DBConexao.criarConexao();
-			var s = con.createStatement();
-
-			s.execute("INSERT INTO contratacoes (id_cliente, id_pacote_viagem, data_contratacao, valor_total) VALUES (" +
-			          "'" + clienteId + "', " +
-			          "'" + pacoteViagemId + "', " +
-			          "'" + dataContratacao + "', " +  
-			          valorTotal + ");");
-			DBConexao.fecharConexao(con);
-
-			return true;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
+	public Long insert() {
+	    try {
+	        var con = DBConexao.criarConexao();
+	        var sql = "INSERT INTO contratacoes (id_cliente, id_pacote_viagem, data_contratacao, valor_total) VALUES (?, ?, ?, ?)";
+	        
+	        // Prepara o statement indicando que queremos as chaves geradas
+	        var ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	        
+	        // Define os parâmetros usando PreparedStatement (mais seguro)
+	        ps.setLong(1, clienteId);
+	        ps.setLong(2, pacoteViagemId);
+	        ps.setDate(3, java.sql.Date.valueOf(dataContratacao));
+	        ps.setBigDecimal(4, valorTotal);
+	        
+	        // Executa a inserção
+	        int affectedRows = ps.executeUpdate();
+	        
+	        if (affectedRows == 0) {
+	            throw new SQLException("Falha na inserção, nenhuma linha foi afetada.");
+	        }
+	        
+	        // Recupera as chaves geradas
+	        try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                Long generatedId = generatedKeys.getLong(1);
+	                this.id = generatedId; // Atualiza o ID do objeto atual
+	                return generatedId;
+	            } else {
+	                throw new SQLException("Falha na inserção, nenhum ID foi gerado.");
+	            }
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return null;
+	    } 
 	}
 	
 	// Atualiza os dados de uma contratação existente

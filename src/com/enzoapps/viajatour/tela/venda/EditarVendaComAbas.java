@@ -359,20 +359,23 @@ public class EditarVendaComAbas extends JDialog {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+        var id = 0L;
         // Preencher o objeto com os dados do formulário
         venda.setClienteId(((Cliente)(cbxCliente.getSelectedItem())).getId());
         venda.setPacoteViagemId(((PacoteViagem)(cbxPacote.getSelectedItem())).getId());
         venda.setDataContratacao(LocalDate.parse(txtData.getText(), formatter));
         venda.setValorTotal(valor);
         if (venda.getId() == null) {
-            venda.insert();
+        	
+            id = venda.insert();
         } else {
             venda.update();
         }
+        
         if (!modelSelecionado.isEmpty()) {
 			for (ServicoAdicional sa : java.util.Collections.list(modelSelecionado.elements())) {
-				var sc = new ServicoContratado(venda.getId(), sa.getId());
+				
+				var sc = new ServicoContratado(venda.getId() == null ? id : venda.getId(), sa.getId());
 				sc.insert();
 			}
 		}
